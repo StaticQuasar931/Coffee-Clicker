@@ -551,6 +551,7 @@
                 cpcElem.innerText = gameState.cpc;
                 cpsElem.innerText = gameState.cps;
                 sparkleChanceElem.innerText = gameState.sparkleChance;
+                currentSparkleElem.innerText = gameState.sparkleChance; // Fix for F9
 
                 // Update Upgrade Costs
                 document.getElementById('cpc-cost').innerText = formatNumber(gameState.cpcCost || 5);
@@ -565,8 +566,7 @@
                 // Ensure Sparkle Chance is clamped
                 gameState.sparkleChance = Math.min(gameState.sparkleChance, 100);
                 sparkleChanceElem.innerText = gameState.sparkleChance;
-
-                // No limits on machines, so no need to disable buttons based on levels
+                currentSparkleElem.innerText = gameState.sparkleChance; // Ensure both displays are updated
             }
 
             // Format Numbers with Commas
