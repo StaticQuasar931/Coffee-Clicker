@@ -88,9 +88,14 @@
             border: 2px solid #4CAF50;
             border-radius: 10px;
             width: 100%;
-            max-width: 700px;
+            max-width: 350px;
             text-align: left;
             position: relative;
+            transition: transform 0.1s;
+        }
+
+        .upgrade:hover, .machine:hover {
+            transform: scale(1.02);
         }
 
         .upgrade h3, .machine h3 {
@@ -144,6 +149,8 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s;
             margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
         }
 
         #coffee-button:hover {
@@ -152,6 +159,28 @@
 
         #coffee-button:active {
             transform: scale(0.95);
+        }
+
+        /* Particle Effect Styles */
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particle-animation 0.6s forwards;
+        }
+
+        @keyframes particle-animation {
+            from {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translate(100px, -100px) scale(0);
+                opacity: 0;
+            }
         }
 
         /* Notification */
@@ -166,6 +195,13 @@
             display: none;
             z-index: 1000;
             font-size: 1em;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .notification.show {
+            display: block;
+            opacity: 1;
         }
 
         /* Footer Styles */
@@ -216,6 +252,26 @@
                 font-size: 0.9em;
             }
         }
+
+        /* Machines Container */
+        .machines-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .machine {
+            flex: 1 1 calc(50% - 40px);
+            max-width: calc(50% - 40px);
+        }
+
+        @media (max-width: 600px) {
+            .machine {
+                flex: 1 1 100%;
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -258,40 +314,43 @@
 
     <div id="machines" class="tab-content">
         <div class="section">
-            <div class="machine" id="machine1">
-                <h3>🛠️ Coffee Beans</h3>
-                <p><strong>Level:</strong> <span id="machine1-level">0</span>/25</p>
-                <p><strong>Effect:</strong> Grants +1 CPS</p>
-                <p><strong>Cost:</strong> <span id="machine1-cost">10</span> Coffee</p>
-                <button id="machine1-btn">Upgrade Coffee Beans</button>
-            </div>
-            <div class="machine" id="machine2">
-                <h3>📄 Coffee Filters</h3>
-                <p><strong>Level:</strong> <span id="machine2-level">0</span>/50</p>
-                <p><strong>Effect:</strong> Grants +1 CPS</p>
-                <p><strong>Cost:</strong> <span id="machine2-cost">25</span> Coffee</p>
-                <button id="machine2-btn">Upgrade Coffee Filters</button>
-            </div>
-            <div class="machine" id="machine3">
-                <h3>🌸 Coffee Cups</h3>
-                <p><strong>Level:</strong> <span id="machine3-level">0</span>/100</p>
-                <p><strong>Effect:</strong> Grants +1 CPS</p>
-                <p><strong>Cost:</strong> <span id="machine3-cost">50</span> Coffee</p>
-                <button id="machine3-btn">Upgrade Coffee Cups</button>
-            </div>
-            <div class="machine" id="machine4">
-                <h3>🧂 Coffee Creamer</h3>
-                <p><strong>Level:</strong> <span id="machine4-level">0</span>/250</p>
-                <p><strong>Effect:</strong> Grants +1 CPS</p>
-                <p><strong>Cost:</strong> <span id="machine4-cost">100</span> Coffee</p>
-                <button id="machine4-btn">Upgrade Coffee Creamer</button>
-            </div>
-            <div class="machine" id="machine5">
-                <h3>🔥 Coffee Heater</h3>
-                <p><strong>Level:</strong> <span id="machine5-level">0</span>/500</p>
-                <p><strong>Effect:</strong> Grants +1 CPS</p>
-                <p><strong>Cost:</strong> <span id="machine5-cost">250</span> Coffee</p>
-                <button id="machine5-btn">Upgrade Coffee Heater</button>
+            <div class="machines-container">
+                <div class="machine" id="machine1">
+                    <h3>🛠️ Coffee Beans</h3>
+                    <p><strong>Level:</strong> <span id="machine1-level">0</span></p>
+                    <p><strong>Effect:</strong> Grants +1 CPS</p>
+                    <p><strong>Cost:</strong> <span id="machine1-cost">10</span> Coffee</p>
+                    <button id="machine1-btn">Upgrade Coffee Beans</button>
+                </div>
+                <div class="machine" id="machine2">
+                    <h3>📄 Coffee Filters</h3>
+                    <p><strong>Level:</strong> <span id="machine2-level">0</span></p>
+                    <p><strong>Effect:</strong> Grants +1 CPS</p>
+                    <p><strong>Cost:</strong> <span id="machine2-cost">25</span> Coffee</p>
+                    <button id="machine2-btn">Upgrade Coffee Filters</button>
+                </div>
+                <div class="machine" id="machine3">
+                    <h3>🌸 Coffee Cups</h3>
+                    <p><strong>Level:</strong> <span id="machine3-level">0</span></p>
+                    <p><strong>Effect:</strong> Grants +1 CPS</p>
+                    <p><strong>Cost:</strong> <span id="machine3-cost">50</span> Coffee</p>
+                    <button id="machine3-btn">Upgrade Coffee Cups</button>
+                </div>
+                <div class="machine" id="machine4">
+                    <h3>🧂 Coffee Creamer</h3>
+                    <p><strong>Level:</strong> <span id="machine4-level">0</span></p>
+                    <p><strong>Effect:</strong> Grants +1 CPS</p>
+                    <p><strong>Cost:</strong> <span id="machine4-cost">100</span> Coffee</p>
+                    <button id="machine4-btn">Upgrade Coffee Creamer</button>
+                </div>
+                <div class="machine" id="machine5">
+                    <h3>🔥 Coffee Heater</h3>
+                    <p><strong>Level:</strong> <span id="machine5-level">0</span></p>
+                    <p><strong>Effect:</strong> Grants +1 CPS</p>
+                    <p><strong>Cost:</strong> <span id="machine5-cost">250</span> Coffee</p>
+                    <button id="machine5-btn">Upgrade Coffee Heater</button>
+                </div>
+                <!-- Add more machines here if needed -->
             </div>
         </div>
     </div>
@@ -463,16 +522,20 @@
             function showNotification(message) {
                 notification.innerText = message;
                 notification.classList.add('show');
-                notification.style.display = 'block';
                 clearTimeout(notification.timeout);
                 notification.timeout = setTimeout(() => {
-                    notification.style.display = 'none';
                     notification.classList.remove('show');
                 }, 3000);
             }
 
             // Coffee Button Click
-            coffeeButton.addEventListener('click', () => {
+            coffeeButton.addEventListener('click', (e) => {
+                const rect = coffeeButton.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                createParticle(x, y);
+
                 const chance = Math.random() * 100;
                 if (chance < sparkleChance) {
                     coffee += cpc * 2;
@@ -490,7 +553,7 @@
                 if (coffee >= cpcCost) {
                     coffee -= cpcCost;
                     cpc += 1;
-                    cpcCost = Math.round(cpcCost * 1.06); // buildingcostlow multiplier
+                    cpcCost = Math.round(cpcCost * 1.06); // Cost multiplier
                     animateButton(upgradeCpcBtn);
                     updateDisplay();
                     showNotification('✨ Coffee per Click Upgraded!');
@@ -507,7 +570,7 @@
                         coffee -= sparkleCost;
                         sparkleChance += 1;
                         sparkleChance = Math.min(sparkleChance, 100); // Cap at 100%
-                        sparkleCost = Math.round(sparkleCost * 1.15); // buildingcostextreme multiplier
+                        sparkleCost = Math.round(sparkleCost * 1.15); // Cost multiplier
                         animateButton(upgradeSparkleBtn);
                         updateDisplay();
                         showNotification('💫 Sparkle Chance Increased!');
@@ -522,17 +585,15 @@
 
             // Machine1 Upgrade (Coffee Beans)
             machine1Btn.addEventListener('click', () => {
-                if (coffee >= machine1Cost && machine1 < 25) {
+                if (coffee >= machine1Cost) {
                     coffee -= machine1Cost;
                     machine1 += 1;
                     cps += 1;
-                    machine1Cost = Math.round(machine1Cost * 1.1); // buildingcost multiplier
+                    machine1Cost = Math.round(machine1Cost * 1.1); // Cost multiplier
                     animateButton(machine1Btn);
                     updateDisplay();
                     showNotification('🛠️ Coffee Beans Machine Upgraded!');
                     saveGame();
-                } else if (machine1 >= 25) {
-                    showNotification("🛠️ Coffee Beans Machine is maxed out!");
                 } else {
                     showNotification("❌ Not enough coffee for Coffee Beans upgrade!");
                 }
@@ -540,17 +601,15 @@
 
             // Machine2 Upgrade (Coffee Filters)
             machine2Btn.addEventListener('click', () => {
-                if (coffee >= machine2Cost && machine2 < 50) {
+                if (coffee >= machine2Cost) {
                     coffee -= machine2Cost;
                     machine2 += 1;
                     cps += 1;
-                    machine2Cost = Math.round(machine2Cost * 1.1); // buildingcost multiplier
+                    machine2Cost = Math.round(machine2Cost * 1.1); // Cost multiplier
                     animateButton(machine2Btn);
                     updateDisplay();
                     showNotification('📄 Coffee Filters Machine Upgraded!');
                     saveGame();
-                } else if (machine2 >= 50) {
-                    showNotification("📄 Coffee Filters Machine is maxed out!");
                 } else {
                     showNotification("❌ Not enough coffee for Coffee Filters upgrade!");
                 }
@@ -558,17 +617,15 @@
 
             // Machine3 Upgrade (Coffee Cups)
             machine3Btn.addEventListener('click', () => {
-                if (coffee >= machine3Cost && machine3 < 100) {
+                if (coffee >= machine3Cost) {
                     coffee -= machine3Cost;
                     machine3 += 1;
                     cps += 1;
-                    machine3Cost = Math.round(machine3Cost * 1.1); // buildingcost multiplier
+                    machine3Cost = Math.round(machine3Cost * 1.1); // Cost multiplier
                     animateButton(machine3Btn);
                     updateDisplay();
                     showNotification('🌸 Coffee Cups Machine Upgraded!');
                     saveGame();
-                } else if (machine3 >= 100) {
-                    showNotification("🌸 Coffee Cups Machine is maxed out!");
                 } else {
                     showNotification("❌ Not enough coffee for Coffee Cups upgrade!");
                 }
@@ -576,17 +633,15 @@
 
             // Machine4 Upgrade (Coffee Creamer)
             machine4Btn.addEventListener('click', () => {
-                if (coffee >= machine4Cost && machine4 < 250) {
+                if (coffee >= machine4Cost) {
                     coffee -= machine4Cost;
                     machine4 += 1;
                     cps += 1;
-                    machine4Cost = Math.round(machine4Cost * 1.1); // buildingcost multiplier
+                    machine4Cost = Math.round(machine4Cost * 1.1); // Cost multiplier
                     animateButton(machine4Btn);
                     updateDisplay();
                     showNotification('🧂 Coffee Creamer Machine Upgraded!');
                     saveGame();
-                } else if (machine4 >= 250) {
-                    showNotification("🧂 Coffee Creamer Machine is maxed out!");
                 } else {
                     showNotification("❌ Not enough coffee for Coffee Creamer upgrade!");
                 }
@@ -594,17 +649,15 @@
 
             // Machine5 Upgrade (Coffee Heater)
             machine5Btn.addEventListener('click', () => {
-                if (coffee >= machine5Cost && machine5 < 500) {
+                if (coffee >= machine5Cost) {
                     coffee -= machine5Cost;
                     machine5 += 1;
                     cps += 1;
-                    machine5Cost = Math.round(machine5Cost * 1.1); // buildingcost multiplier
+                    machine5Cost = Math.round(machine5Cost * 1.1); // Cost multiplier
                     animateButton(machine5Btn);
                     updateDisplay();
                     showNotification('🔥 Coffee Heater Machine Upgraded!');
                     saveGame();
-                } else if (machine5 >= 500) {
-                    showNotification("🔥 Coffee Heater Machine is maxed out!");
                 } else {
                     showNotification("❌ Not enough coffee for Coffee Heater upgrade!");
                 }
@@ -641,7 +694,7 @@
                 });
             });
 
-            // Function to Check Maxed Out Upgrades
+            // Function to Check Maxed Out Upgrades (Removed since no limits)
             function checkMaxedOut() {
                 // Sparkle Chance Max
                 if (sparkleChance >= 100) {
@@ -652,25 +705,36 @@
                     document.querySelector('#upgrade-sparkle p:nth-child(4)').innerText = `${sparkleCost} Coffee`;
                 }
 
-                // Machines Max
-                checkMachineMax('machine1', machine1, 25, machine1Cost, machine1Btn);
-                checkMachineMax('machine2', machine2, 50, machine2Cost, machine2Btn);
-                checkMachineMax('machine3', machine3, 100, machine3Cost, machine3Btn);
-                checkMachineMax('machine4', machine4, 250, machine4Cost, machine4Btn);
-                checkMachineMax('machine5', machine5, 500, machine5Cost, machine5Btn);
+                // Machines do not have max levels now, so no need to disable buttons
+                // However, to reflect updated costs, we ensure display is correct
+                updateMachineCosts();
             }
 
-            // Helper Function to Check Machine Max
-            function checkMachineMax(machineId, machineLevel, maxLevel, machineCost, machineBtn) {
-                const machineElem = document.getElementById(machineId);
-                if (machineLevel >= maxLevel) {
-                    machineBtn.disabled = true;
-                    const costElem = machineElem.querySelector('p:nth-child(3)');
-                    costElem.innerText = "Maxed Out!";
-                } else {
-                    machineBtn.disabled = false;
-                    const costElem = machineElem.querySelector('p:nth-child(3)');
-                    costElem.innerText = `Cost: ${machineCost} Coffee`;
+            // Update Machine Costs Display
+            function updateMachineCosts() {
+                document.querySelectorAll('.machine').forEach(machine => {
+                    const machineId = machine.id;
+                    const costElem = machine.querySelector('p:nth-child(3)');
+                    const cost = getMachineCost(machineId);
+                    costElem.innerText = `Cost: ${cost} Coffee`;
+                });
+            }
+
+            // Get Machine Cost based on ID
+            function getMachineCost(machineId) {
+                switch(machineId) {
+                    case 'machine1':
+                        return machine1Cost;
+                    case 'machine2':
+                        return machine2Cost;
+                    case 'machine3':
+                        return machine3Cost;
+                    case 'machine4':
+                        return machine4Cost;
+                    case 'machine5':
+                        return machine5Cost;
+                    default:
+                        return 0;
                 }
             }
 
@@ -681,7 +745,19 @@
                     button.classList.remove('button-click');
                 }, 100);
             }
-        });
-    </script>
+
+            // Create Particle Effect on Coffee Button Click
+            function createParticle(x, y) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                coffeeButton.appendChild(particle);
+
+                particle.addEventListener('animationend', () => {
+                    particle.remove();
+                });
+            }
+        </script>
 </body>
 </html>
