@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coffee Clicker</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include Google Fonts for a Minecraft-like font -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Coffee Clicker</h1>
+        <div class="stats">
+            <p>Coffee: <span id="coffee-count">0</span></p>
+            <p>Coffee per Click: <span id="cpc">1</span></p>
+            <p>Coffee per Second: <span id="cps">0</span></p>
+        </div>
+        <button id="coffee-button">☕ Click Me!</button>
+        <div class="upgrades">
+            <h2>Upgrades</h2>
+            <div class="upgrade" id="upgrade-cpc">
+                <p>Increase Coffee per Click</p>
+                <p>Cost: <span id="cpc-cost">5</span> Coffee</p>
+                <button>Upgrade</button>
+            </div>
+            <div class="upgrade" id="upgrade-cps">
+                <p>Increase Coffee per Second</p>
+                <p>Cost: <span id="cps-cost">10</span> Coffee</p>
+                <button>Upgrade</button>
+            </div>
+        </div>
+        <div class="shop">
+            <h2>Shop</h2>
+            <div class="shop-item" id="shop-diamond">
+                <p>Buy Diamond Block</p>
+                <p>Cost: 25 Coffee</p>
+                <button>Buy</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
 
