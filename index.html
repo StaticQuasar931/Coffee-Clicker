@@ -3,42 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <title>Coffee Clicker</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Include Google Fonts for a Minecraft-like font -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #2b2b2b;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .stats, .upgrades, .shop {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #3e3e3e;
+            border-radius: 10px;
+            display: inline-block;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .stats p, .upgrade p, .shop-item p {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .upgrade, .shop-item {
+            background-color: #2e2e2e;
+            padding: 15px;
+            margin: 15px auto;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            width: 80%;
+        }
+
+        .upgrade h3, .shop-item h3 {
+            margin-bottom: 10px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 500; 
+            padding-top: 100px; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.7); 
+        }
+
+        .modal-content {
+            background-color: #3e3e3e;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #4CAF50;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Footer Styles */
+        footer {
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .stats, .upgrades, .shop, .upgrade, .shop-item {
+                width: 95%;
+            }
+
+            button {
+                width: 80%;
+                margin: 10px auto;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Coffee Clicker</h1>
-        <div class="stats">
-            <p>Coffee: <span id="coffee-count">0</span></p>
-            <p>Coffee per Click: <span id="cpc">1</span></p>
-            <p>Coffee per Second: <span id="cps">0</span></p>
+    <h1>☕ Coffee Clicker ☕</h1>
+
+    <div class="stats">
+        <p>👥 Coffee: <span id="coffee-count">0</span></p>
+        <p>✨ Coffee per Click (CPC): <span id="cpc">1</span></p>
+        <p>⏱️ Coffee per Second (CPS): <span id="cps">0</span></p>
+    </div>
+
+    <button id="coffee-button">☕ Click Me!</button>
+
+    <div class="upgrades">
+        <h2>🔧 Upgrades</h2>
+        <div class="upgrade" id="upgrade-cpc">
+            <h3>✨ Increase CPC</h3>
+            <p>Cost: <span id="cpc-cost">5</span> Coffee</p>
+            <button>Upgrade CPC</button>
         </div>
-        <button id="coffee-button">☕ Click Me!</button>
-        <div class="upgrades">
-            <h2>Upgrades</h2>
-            <div class="upgrade" id="upgrade-cpc">
-                <p>Increase Coffee per Click</p>
-                <p>Cost: <span id="cpc-cost">5</span> Coffee</p>
-                <button>Upgrade</button>
-            </div>
-            <div class="upgrade" id="upgrade-cps">
-                <p>Increase Coffee per Second</p>
-                <p>Cost: <span id="cps-cost">10</span> Coffee</p>
-                <button>Upgrade</button>
-            </div>
-        </div>
-        <div class="shop">
-            <h2>Shop</h2>
-            <div class="shop-item" id="shop-diamond">
-                <p>Buy Diamond Block</p>
-                <p>Cost: 25 Coffee</p>
-                <button>Buy</button>
-            </div>
+        <div class="upgrade" id="upgrade-cps">
+            <h3>⏱️ Increase CPS</h3>
+            <p>Cost: <span id="cps-cost">10</span> Coffee</p>
+            <button>Upgrade CPS</button>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <div class="shop">
+        <h2>🛒 Shop</h2>
+        <div class="shop-item" id="shop-diamond">
+            <h3>💎 Buy Diamond Block</h3>
+            <p>Cost: 25 Coffee</p>
+            <button>Buy Diamond</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Footer with Links -->
+    <footer>
+        <p>Join our Discord: <a href="https://discord.gg/aNThCfAPXG" target="_blank">🔗 Discord Server</a></p>
+        <p>Made by <strong>MouseManYT</strong> implemented by <a href="https://sites.google.com/view/staticquasar931" target="_blank"><strong>Static</strong></a></p>
+    </footer>
+
+    <script>
+        // Game Variables
+        let coffee = 0;
+        let cpc = 1;
+        let cps = 0;
+
+        let cpcCost = 5;
+        let cpsCost = 10;
+        const diamondCost = 25;
+
+        // DOM Elements
+        const coffeeCountElem = document.getElementById('coffee-count');
+        const cpcElem = document.getElementById('cpc');
+        const cpsElem = document.getElementById('cps');
+
+        const coffeeButton = document.getElementById('coffee-button');
+        const upgradeCpcBtn = document.querySelector('#upgrade-cpc button');
+        const upgradeCpsBtn = document.querySelector('#upgrade-cps button');
+        const shopDiamondBtn = document.querySelector('#shop-diamond button');
+
+        const notification = document.getElementById('notification');
+
+        // Load Game Data from localStorage
+        window.onload = () => {
+            if (localStorage.getItem('coffee')) {
+                coffee = parseInt(localStorage.getItem('coffee'));
+                cpc = parseInt(localStorage.getItem('cpc'));
+                cps = parseInt(localStorage.getItem('cps'));
+                cpcCost = parseInt(localStorage.getItem('cpcCost'));
+                cpsCost = parseInt(localStorage.getItem('cpsCost'));
+                updateDisplay();
+            }
+        };
+
+        // Save Game Data to localStorage
+        setInterval(() => {
+            coffee += cps;
+            updateDisplay();
+            localStorage.setItem('coffee', coffee);
+            localStorage.setItem('cpc', cpc);
+            localStorage.setItem('cps', cps);
+            localStorage.setItem('cpcCost', cpcCost);
+            localStorage.setItem('cpsCost', cpsCost);
+        }, 1000);
+
+        // Update Display Function
+        function updateDisplay() {
+            coffeeCountElem.innerText = coffee;
+            cpcElem.innerText = cpc;
+            cpsElem.innerText = cps;
+
+            // Update Upgrade Costs
+            document.getElementById('cpc-cost').innerText = cpcCost;
+            document.getElementById('cps-cost').innerText = cpsCost;
+        }
+
+        // Show Notification
+        function showNotification(message) {
+            notification.innerText = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Coffee Button Click
+        coffeeButton.addEventListener('click', () => {
+            coffee += cpc;
+            updateDisplay();
+        });
+
+        // Upgrade CPC
+        upgradeCpcBtn.addEventListener('click', () => {
+            if (coffee >= cpcCost) {
+                coffee -= cpcCost;
+                cpc += 1;
+                cpcCost = Math.round(cpcCost * 1.1);
+                updateDisplay();
+                showNotification('✨ CPC Upgraded!');
+            } else {
+                showNotification("❌ Not enough coffee for CPC upgrade!");
+            }
+        });
+
+        // Upgrade CPS
+        upgradeCpsBtn.addEventListener('click', () => {
+            if (coffee >= cpsCost) {
+                coffee -= cpsCost;
+                cps += 1;
+                cpsCost = Math.round(cpsCost * 1.15);
+                updateDisplay();
+                showNotification('⏱️ CPS Upgraded!');
+            } else {
+                showNotification("❌ Not enough coffee for CPS upgrade!");
+            }
+        });
+
+        // Shop - Buy Diamond Block
+        shopDiamondBtn.addEventListener('click', () => {
+            if (coffee >= diamondCost) {
+                coffee -= diamondCost;
+                updateDisplay();
+                showNotification('💎 Diamond Block Purchased!');
+                // You can add functionality to track owned items if desired
+            } else {
+                showNotification("❌ Not enough coffee to buy Diamond Block!");
+            }
+        });
+    </script>
 </body>
 </html>
-
