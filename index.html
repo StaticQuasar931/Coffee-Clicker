@@ -104,6 +104,21 @@
             padding: 10px;
             font-size: 1em;
             margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .upgrade button:hover, .machine button:hover, .shop-item button:hover {
+            background-color: #45a049;
+        }
+
+        /* Disabled Button Styles */
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            opacity: 0.6;
         }
 
         /* Coffee Click Button */
@@ -346,28 +361,50 @@
             updateDisplay();
         };
 
-        // Load Game Data from localStorage
+        // Load Game Data from localStorage with Validation
         function loadGame() {
-            coffee = parseInt(localStorage.getItem('coffee')) || 0;
-            cpc = parseInt(localStorage.getItem('cpc')) || 1;
-            cps = parseInt(localStorage.getItem('cps')) || 0;
-            sparkleChance = parseInt(localStorage.getItem('sparkleChance')) || 0;
-            dirt = parseInt(localStorage.getItem('dirt')) || 0;
+            coffee = parseInt(localStorage.getItem('coffee'));
+            cpc = parseInt(localStorage.getItem('cpc'));
+            cps = parseInt(localStorage.getItem('cps'));
+            sparkleChance = parseInt(localStorage.getItem('sparkleChance'));
+            dirt = parseInt(localStorage.getItem('dirt'));
 
-            machine1 = parseInt(localStorage.getItem('machine1')) || 0;
-            machine2 = parseInt(localStorage.getItem('machine2')) || 0;
-            machine3 = parseInt(localStorage.getItem('machine3')) || 0;
-            machine4 = parseInt(localStorage.getItem('machine4')) || 0;
-            machine5 = parseInt(localStorage.getItem('machine5')) || 0;
+            machine1 = parseInt(localStorage.getItem('machine1'));
+            machine2 = parseInt(localStorage.getItem('machine2'));
+            machine3 = parseInt(localStorage.getItem('machine3'));
+            machine4 = parseInt(localStorage.getItem('machine4'));
+            machine5 = parseInt(localStorage.getItem('machine5'));
 
-            cpcCost = parseInt(localStorage.getItem('cpcCost')) || 5;
-            sparkleCost = parseInt(localStorage.getItem('sparkleCost')) || 1000;
+            cpcCost = parseInt(localStorage.getItem('cpcCost'));
+            sparkleCost = parseInt(localStorage.getItem('sparkleCost'));
 
-            machine1Cost = parseInt(localStorage.getItem('machine1Cost')) || 10;
-            machine2Cost = parseInt(localStorage.getItem('machine2Cost')) || 25;
-            machine3Cost = parseInt(localStorage.getItem('machine3Cost')) || 50;
-            machine4Cost = parseInt(localStorage.getItem('machine4Cost')) || 100;
-            machine5Cost = parseInt(localStorage.getItem('machine5Cost')) || 250;
+            machine1Cost = parseInt(localStorage.getItem('machine1Cost'));
+            machine2Cost = parseInt(localStorage.getItem('machine2Cost'));
+            machine3Cost = parseInt(localStorage.getItem('machine3Cost'));
+            machine4Cost = parseInt(localStorage.getItem('machine4Cost'));
+            machine5Cost = parseInt(localStorage.getItem('machine5Cost'));
+
+            // Validation
+            coffee = isNaN(coffee) ? 0 : coffee;
+            cpc = isNaN(cpc) ? 1 : cpc;
+            cps = isNaN(cps) ? 0 : cps;
+            sparkleChance = isNaN(sparkleChance) ? 0 : sparkleChance;
+            dirt = isNaN(dirt) ? 0 : dirt;
+
+            machine1 = isNaN(machine1) ? 0 : machine1;
+            machine2 = isNaN(machine2) ? 0 : machine2;
+            machine3 = isNaN(machine3) ? 0 : machine3;
+            machine4 = isNaN(machine4) ? 0 : machine4;
+            machine5 = isNaN(machine5) ? 0 : machine5;
+
+            cpcCost = isNaN(cpcCost) ? 5 : cpcCost;
+            sparkleCost = isNaN(sparkleCost) ? 1000 : sparkleCost;
+
+            machine1Cost = isNaN(machine1Cost) ? 10 : machine1Cost;
+            machine2Cost = isNaN(machine2Cost) ? 25 : machine2Cost;
+            machine3Cost = isNaN(machine3Cost) ? 50 : machine3Cost;
+            machine4Cost = isNaN(machine4Cost) ? 100 : machine4Cost;
+            machine5Cost = isNaN(machine5Cost) ? 250 : machine5Cost;
         }
 
         // Save Game Data to localStorage
@@ -405,6 +442,9 @@
             // Update Upgrade Costs
             document.getElementById('cpc-cost').innerText = cpcCost;
             document.getElementById('sparkle-cost').innerText = sparkleCost;
+
+            // Update Sparkle Chance Display
+            document.getElementById('current-sparkle').innerText = sparkleChance;
 
             // Update Machine Levels and Costs
             document.getElementById('machine1-level').innerText = machine1;
@@ -452,11 +492,11 @@
                     const dirtChance = Math.random() * 1000;
                     if (dirtChance < 1) { // 0.1% chance
                         dirt = 1;
-                        showNotification('🪨 Coffee Beans Infested! Clean to Continue.');
+                        showNotification('🪨 Coffee Beans Infested! Reopen Stats to Clean.');
                     }
                 }
             } else {
-                showNotification('🪨 Coffee Beans are infested! Clean to resume clicking.');
+                showNotification('🪨 Coffee Beans are infested! Reopen Stats to Clean.');
             }
             updateDisplay();
             saveGame();
@@ -482,6 +522,7 @@
                 if (sparkleChance < 100) {
                     coffee -= sparkleCost;
                     sparkleChance += 1;
+                    sparkleChance = Math.min(sparkleChance, 100); // Cap at 100%
                     sparkleCost = Math.round(sparkleCost * 1.15); // buildingcostextreme multiplier
                     updateDisplay();
                     showNotification('💫 Sparkle Chance Increased!');
@@ -610,6 +651,15 @@
                 tabContents.forEach(content => {
                     if(content.id === target) {
                         content.classList.add('active');
+                        // Reset Dirt status when opening Stats tab
+                        if(target === 'stats') {
+                            if(dirt === 1) {
+                                dirt = 0;
+                                showNotification('🧹 Dirt has been cleaned! Resume clicking.');
+                                updateDisplay();
+                                saveGame();
+                            }
+                        }
                     } else {
                         content.classList.remove('active');
                     }
@@ -622,10 +672,10 @@
             // Sparkle Chance Max
             if (sparkleChance >= 100) {
                 upgradeSparkleBtn.disabled = true;
-                document.querySelector('#upgrade-sparkle p:nth-child(3)').innerText = "Maxed Out!";
+                document.querySelector('#upgrade-sparkle p:nth-child(4)').innerText = "Maxed Out!";
             } else {
                 upgradeSparkleBtn.disabled = false;
-                document.querySelector('#upgrade-sparkle p:nth-child(3)').innerText = `Cost: ${sparkleCost} Coffee`;
+                document.querySelector('#upgrade-sparkle p:nth-child(4)').innerText = `${sparkleCost} Coffee`;
             }
 
             // Machines Max
