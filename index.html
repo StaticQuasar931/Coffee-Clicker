@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Coffee Clicker</title>
+    <title>☕ Coffee Clicker ☕</title>
     <style>
         /* Reset and Base Styles */
         * {
@@ -14,7 +14,7 @@
         body {
             background-color: #2b2b2b;
             color: #fff;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
             padding: 20px;
         }
@@ -22,19 +22,20 @@
         h1 {
             color: #4CAF50;
             margin-bottom: 20px;
+            font-size: 2.5em;
         }
 
-        .stats, .upgrades, .shop {
+        .stats, .upgrades, .machines, .shop {
             margin: 20px 0;
-            padding: 10px;
+            padding: 15px;
             background-color: #3e3e3e;
             border-radius: 10px;
             display: inline-block;
             width: 90%;
-            max-width: 600px;
+            max-width: 800px;
         }
 
-        .stats p, .upgrade p, .shop-item p {
+        .stats p, .upgrade p, .machine p, .shop-item p {
             margin: 10px 0;
             font-size: 1.2em;
         }
@@ -44,7 +45,7 @@
             border: none;
             color: white;
             padding: 10px 20px;
-            margin: 10px;
+            margin: 10px 5px;
             font-size: 1em;
             cursor: pointer;
             border-radius: 5px;
@@ -55,7 +56,7 @@
             background-color: #45a049;
         }
 
-        .upgrade, .shop-item {
+        .upgrade, .machine, .shop-item {
             background-color: #2e2e2e;
             padding: 15px;
             margin: 15px auto;
@@ -64,7 +65,7 @@
             width: 80%;
         }
 
-        .upgrade h3, .shop-item h3 {
+        .upgrade h3, .machine h3, .shop-item h3 {
             margin-bottom: 10px;
         }
 
@@ -138,7 +139,7 @@
 
         /* Responsive */
         @media (max-width: 600px) {
-            .stats, .upgrades, .shop, .upgrade, .shop-item {
+            .stats, .upgrades, .machines, .shop, .upgrade, .machine, .shop-item {
                 width: 95%;
             }
 
@@ -152,14 +153,19 @@
 <body>
     <h1>☕ Coffee Clicker ☕</h1>
 
+    <!-- Coffee Stats -->
     <div class="stats">
         <p>👥 Coffee: <span id="coffee-count">0</span></p>
         <p>✨ Coffee per Click (CPC): <span id="cpc">1</span></p>
         <p>⏱️ Coffee per Second (CPS): <span id="cps">0</span></p>
+        <p>💫 Sparkle Chance: <span id="sparkleChance">0</span>%</p>
+        <p>🪨 Dirt Status: <span id="dirtStatus">Clean</span></p>
     </div>
 
+    <!-- Coffee Click Button -->
     <button id="coffee-button">☕ Click Me!</button>
 
+    <!-- Upgrades Section -->
     <div class="upgrades">
         <h2>🔧 Upgrades</h2>
         <div class="upgrade" id="upgrade-cpc">
@@ -167,19 +173,66 @@
             <p>Cost: <span id="cpc-cost">5</span> Coffee</p>
             <button>Upgrade CPC</button>
         </div>
-        <div class="upgrade" id="upgrade-cps">
-            <h3>⏱️ Increase CPS</h3>
-            <p>Cost: <span id="cps-cost">10</span> Coffee</p>
-            <button>Upgrade CPS</button>
+        <div class="upgrade" id="upgrade-sparkle">
+            <h3>💫 Increase Sparkle Chance</h3>
+            <p>Cost: <span id="sparkle-cost">1000</span> Coffee</p>
+            <button>Upgrade Sparkle Chance</button>
         </div>
     </div>
 
+    <!-- Machines Section -->
+    <div class="machines">
+        <h2>🛠️ Coffee Machines</h2>
+        <div class="machine" id="machine1">
+            <h3>🛠️ Coffee Beans</h3>
+            <p>Level: <span id="machine1-level">0</span>/25</p>
+            <p>Grants +1 CPS</p>
+            <p>Cost: <span id="machine1-cost">10</span> Coffee</p>
+            <button>Upgrade Coffee Beans</button>
+        </div>
+        <div class="machine" id="machine2">
+            <h3>📄 Coffee Filters</h3>
+            <p>Level: <span id="machine2-level">0</span>/50</p>
+            <p>Grants +1 CPS</p>
+            <p>Cost: <span id="machine2-cost">25</span> Coffee</p>
+            <button>Upgrade Coffee Filters</button>
+        </div>
+        <div class="machine" id="machine3">
+            <h3>🌸 Coffee Cups</h3>
+            <p>Level: <span id="machine3-level">0</span>/100</p>
+            <p>Grants +1 CPS</p>
+            <p>Cost: <span id="machine3-cost">50</span> Coffee</p>
+            <button>Upgrade Coffee Cups</button>
+        </div>
+        <div class="machine" id="machine4">
+            <h3>🧂 Coffee Creamer</h3>
+            <p>Level: <span id="machine4-level">0</span>/250</p>
+            <p>Grants +1 CPS</p>
+            <p>Cost: <span id="machine4-cost">100</span> Coffee</p>
+            <button>Upgrade Coffee Creamer</button>
+        </div>
+        <div class="machine" id="machine5">
+            <h3>🔥 Coffee Heater</h3>
+            <p>Level: <span id="machine5-level">0</span>/500</p>
+            <p>Grants +1 CPS</p>
+            <p>Cost: <span id="machine5-cost">250</span> Coffee</p>
+            <button>Upgrade Coffee Heater</button>
+        </div>
+    </div>
+
+    <!-- Shop Section -->
     <div class="shop">
-        <h2>🛒 Shop</h2>
+        <h2>🛒 Coffee Shop</h2>
         <div class="shop-item" id="shop-diamond">
             <h3>💎 Buy Diamond Block</h3>
             <p>Cost: 25 Coffee</p>
-            <button>Buy Diamond</button>
+            <button>Buy Diamond Block</button>
+        </div>
+        <!-- Future Shop Items (Coming Soon) -->
+        <div class="shop-item" style="display:none;">
+            <h3>🔮 Future Item</h3>
+            <p>Coming Soon!</p>
+            <button disabled>Unavailable</button>
         </div>
     </div>
 
@@ -197,19 +250,45 @@
         let coffee = 0;
         let cpc = 1;
         let cps = 0;
+        let sparkleChance = 0;
+        let dirt = 0;
 
+        let machine1 = 0;
+        let machine2 = 0;
+        let machine3 = 0;
+        let machine4 = 0;
+        let machine5 = 0;
+
+        // Cost Variables
         let cpcCost = 5;
-        let cpsCost = 10;
+        let sparkleCost = 1000;
+
+        let machine1Cost = 10;
+        let machine2Cost = 25;
+        let machine3Cost = 50;
+        let machine4Cost = 100;
+        let machine5Cost = 250;
+
         const diamondCost = 25;
 
         // DOM Elements
         const coffeeCountElem = document.getElementById('coffee-count');
         const cpcElem = document.getElementById('cpc');
         const cpsElem = document.getElementById('cps');
+        const sparkleChanceElem = document.getElementById('sparkleChance');
+        const dirtStatusElem = document.getElementById('dirtStatus');
 
         const coffeeButton = document.getElementById('coffee-button');
+
         const upgradeCpcBtn = document.querySelector('#upgrade-cpc button');
-        const upgradeCpsBtn = document.querySelector('#upgrade-cps button');
+        const upgradeSparkleBtn = document.querySelector('#upgrade-sparkle button');
+
+        const machine1Btn = document.querySelector('#machine1 button');
+        const machine2Btn = document.querySelector('#machine2 button');
+        const machine3Btn = document.querySelector('#machine3 button');
+        const machine4Btn = document.querySelector('#machine4 button');
+        const machine5Btn = document.querySelector('#machine5 button');
+
         const shopDiamondBtn = document.querySelector('#shop-diamond button');
 
         const notification = document.getElementById('notification');
@@ -220,47 +299,117 @@
                 coffee = parseInt(localStorage.getItem('coffee'));
                 cpc = parseInt(localStorage.getItem('cpc'));
                 cps = parseInt(localStorage.getItem('cps'));
-                cpcCost = parseInt(localStorage.getItem('cpcCost'));
-                cpsCost = parseInt(localStorage.getItem('cpsCost'));
+                sparkleChance = parseInt(localStorage.getItem('sparkleChance'));
+                dirt = parseInt(localStorage.getItem('dirt'));
+
+                machine1 = parseInt(localStorage.getItem('machine1')) || 0;
+                machine2 = parseInt(localStorage.getItem('machine2')) || 0;
+                machine3 = parseInt(localStorage.getItem('machine3')) || 0;
+                machine4 = parseInt(localStorage.getItem('machine4')) || 0;
+                machine5 = parseInt(localStorage.getItem('machine5')) || 0;
+
+                cpcCost = parseInt(localStorage.getItem('cpcCost')) || 5;
+                sparkleCost = parseInt(localStorage.getItem('sparkleCost')) || 1000;
+
+                machine1Cost = parseInt(localStorage.getItem('machine1Cost')) || 10;
+                machine2Cost = parseInt(localStorage.getItem('machine2Cost')) || 25;
+                machine3Cost = parseInt(localStorage.getItem('machine3Cost')) || 50;
+                machine4Cost = parseInt(localStorage.getItem('machine4Cost')) || 100;
+                machine5Cost = parseInt(localStorage.getItem('machine5Cost')) || 250;
+
                 updateDisplay();
+            } else {
+                // Initialize localStorage if not set
+                saveGame();
             }
         };
 
         // Save Game Data to localStorage
-        setInterval(() => {
-            coffee += cps;
-            updateDisplay();
+        function saveGame() {
             localStorage.setItem('coffee', coffee);
             localStorage.setItem('cpc', cpc);
             localStorage.setItem('cps', cps);
+            localStorage.setItem('sparkleChance', sparkleChance);
+            localStorage.setItem('dirt', dirt);
+
+            localStorage.setItem('machine1', machine1);
+            localStorage.setItem('machine2', machine2);
+            localStorage.setItem('machine3', machine3);
+            localStorage.setItem('machine4', machine4);
+            localStorage.setItem('machine5', machine5);
+
             localStorage.setItem('cpcCost', cpcCost);
-            localStorage.setItem('cpsCost', cpsCost);
-        }, 1000);
+            localStorage.setItem('sparkleCost', sparkleCost);
+
+            localStorage.setItem('machine1Cost', machine1Cost);
+            localStorage.setItem('machine2Cost', machine2Cost);
+            localStorage.setItem('machine3Cost', machine3Cost);
+            localStorage.setItem('machine4Cost', machine4Cost);
+            localStorage.setItem('machine5Cost', machine5Cost);
+        }
 
         // Update Display Function
         function updateDisplay() {
             coffeeCountElem.innerText = coffee;
             cpcElem.innerText = cpc;
             cpsElem.innerText = cps;
+            sparkleChanceElem.innerText = sparkleChance;
+            dirtStatusElem.innerText = dirt === 0 ? "Clean" : "Infested";
 
             // Update Upgrade Costs
             document.getElementById('cpc-cost').innerText = cpcCost;
-            document.getElementById('cps-cost').innerText = cpsCost;
+            document.getElementById('sparkle-cost').innerText = sparkleCost;
+
+            // Update Machine Levels and Costs
+            document.getElementById('machine1-level').innerText = machine1;
+            document.getElementById('machine1-cost').innerText = machine1Cost;
+            document.getElementById('machine2-level').innerText = machine2;
+            document.getElementById('machine2-cost').innerText = machine2Cost;
+            document.getElementById('machine3-level').innerText = machine3;
+            document.getElementById('machine3-cost').innerText = machine3Cost;
+            document.getElementById('machine4-level').innerText = machine4;
+            document.getElementById('machine4-cost').innerText = machine4Cost;
+            document.getElementById('machine5-level').innerText = machine5;
+            document.getElementById('machine5-cost').innerText = machine5Cost;
+
+            // Disable buttons if maxed out
+            checkMaxedOut();
         }
 
         // Show Notification
         function showNotification(message) {
             notification.innerText = message;
             notification.style.display = 'block';
-            setTimeout(() => {
+            clearTimeout(notification.timeout);
+            notification.timeout = setTimeout(() => {
                 notification.style.display = 'none';
             }, 3000);
         }
 
         // Coffee Button Click
         coffeeButton.addEventListener('click', () => {
-            coffee += cpc;
+            if (dirt === 0) {
+                const chance = Math.random() * 1000;
+                if (chance < sparkleChance) {
+                    coffee += cpc * 2;
+                    showNotification('✨ SPARKLING COFFEE CLICK! Double Coffee Earned!');
+                } else {
+                    coffee += cpc;
+                }
+
+                // Chance to get dirt after high CPC
+                if (cpc > 150) {
+                    const dirtChance = Math.random() * 1000;
+                    if (dirtChance < 1) { // 0.1% chance
+                        dirt = 1;
+                        showNotification('🪨 Coffee Beans Infested! Clean to Continue.');
+                    }
+                }
+            } else {
+                showNotification('🪨 Coffee Beans are infested! Clean to resume clicking.');
+            }
             updateDisplay();
+            saveGame();
         });
 
         // Upgrade CPC
@@ -268,24 +417,115 @@
             if (coffee >= cpcCost) {
                 coffee -= cpcCost;
                 cpc += 1;
-                cpcCost = Math.round(cpcCost * 1.1);
+                cpcCost = Math.round(cpcCost * 1.06); // buildingcostlow multiplier
                 updateDisplay();
-                showNotification('✨ CPC Upgraded!');
+                showNotification('✨ Coffee per Click Upgraded!');
+                saveGame();
             } else {
                 showNotification("❌ Not enough coffee for CPC upgrade!");
             }
         });
 
-        // Upgrade CPS
-        upgradeCpsBtn.addEventListener('click', () => {
-            if (coffee >= cpsCost) {
-                coffee -= cpsCost;
-                cps += 1;
-                cpsCost = Math.round(cpsCost * 1.15);
-                updateDisplay();
-                showNotification('⏱️ CPS Upgraded!');
+        // Upgrade Sparkle Chance
+        upgradeSparkleBtn.addEventListener('click', () => {
+            if (coffee >= sparkleCost) {
+                if (sparkleChance < 100) {
+                    coffee -= sparkleCost;
+                    sparkleChance += 1;
+                    sparkleCost = Math.round(sparkleCost * 1.15); // buildingcostextreme multiplier
+                    updateDisplay();
+                    showNotification('💫 Sparkle Chance Increased!');
+                    saveGame();
+                } else {
+                    showNotification("✨ Sparkle Chance is already at maximum!");
+                }
             } else {
-                showNotification("❌ Not enough coffee for CPS upgrade!");
+                showNotification("❌ Not enough coffee for Sparkle Chance upgrade!");
+            }
+        });
+
+        // Machine1 Upgrade (Coffee Beans)
+        machine1Btn.addEventListener('click', () => {
+            if (coffee >= machine1Cost && machine1 < 25) {
+                coffee -= machine1Cost;
+                machine1 += 1;
+                cps += 1;
+                machine1Cost = Math.round(machine1Cost * 1.1); // buildingcost multiplier
+                updateDisplay();
+                showNotification('🛠️ Coffee Beans Machine Upgraded!');
+                saveGame();
+            } else if (machine1 >= 25) {
+                showNotification("🛠️ Coffee Beans Machine is maxed out!");
+            } else {
+                showNotification("❌ Not enough coffee for Coffee Beans upgrade!");
+            }
+        });
+
+        // Machine2 Upgrade (Coffee Filters)
+        machine2Btn.addEventListener('click', () => {
+            if (coffee >= machine2Cost && machine2 < 50) {
+                coffee -= machine2Cost;
+                machine2 += 1;
+                cps += 1;
+                machine2Cost = Math.round(machine2Cost * 1.1); // buildingcost multiplier
+                updateDisplay();
+                showNotification('📄 Coffee Filters Machine Upgraded!');
+                saveGame();
+            } else if (machine2 >= 50) {
+                showNotification("📄 Coffee Filters Machine is maxed out!");
+            } else {
+                showNotification("❌ Not enough coffee for Coffee Filters upgrade!");
+            }
+        });
+
+        // Machine3 Upgrade (Coffee Cups)
+        machine3Btn.addEventListener('click', () => {
+            if (coffee >= machine3Cost && machine3 < 100) {
+                coffee -= machine3Cost;
+                machine3 += 1;
+                cps += 1;
+                machine3Cost = Math.round(machine3Cost * 1.1); // buildingcost multiplier
+                updateDisplay();
+                showNotification('🌸 Coffee Cups Machine Upgraded!');
+                saveGame();
+            } else if (machine3 >= 100) {
+                showNotification("🌸 Coffee Cups Machine is maxed out!");
+            } else {
+                showNotification("❌ Not enough coffee for Coffee Cups upgrade!");
+            }
+        });
+
+        // Machine4 Upgrade (Coffee Creamer)
+        machine4Btn.addEventListener('click', () => {
+            if (coffee >= machine4Cost && machine4 < 250) {
+                coffee -= machine4Cost;
+                machine4 += 1;
+                cps += 1;
+                machine4Cost = Math.round(machine4Cost * 1.1); // buildingcost multiplier
+                updateDisplay();
+                showNotification('🧂 Coffee Creamer Machine Upgraded!');
+                saveGame();
+            } else if (machine4 >= 250) {
+                showNotification("🧂 Coffee Creamer Machine is maxed out!");
+            } else {
+                showNotification("❌ Not enough coffee for Coffee Creamer upgrade!");
+            }
+        });
+
+        // Machine5 Upgrade (Coffee Heater)
+        machine5Btn.addEventListener('click', () => {
+            if (coffee >= machine5Cost && machine5 < 500) {
+                coffee -= machine5Cost;
+                machine5 += 1;
+                cps += 1;
+                machine5Cost = Math.round(machine5Cost * 1.1); // buildingcost multiplier
+                updateDisplay();
+                showNotification('🔥 Coffee Heater Machine Upgraded!');
+                saveGame();
+            } else if (machine5 >= 500) {
+                showNotification("🔥 Coffee Heater Machine is maxed out!");
+            } else {
+                showNotification("❌ Not enough coffee for Coffee Heater upgrade!");
             }
         });
 
@@ -295,11 +535,88 @@
                 coffee -= diamondCost;
                 updateDisplay();
                 showNotification('💎 Diamond Block Purchased!');
-                // You can add functionality to track owned items if desired
+                // Implement additional functionality as needed
             } else {
                 showNotification("❌ Not enough coffee to buy Diamond Block!");
             }
         });
+
+        // Periodic Coffee Addition based on CPS (Every 3 seconds)
+        setInterval(() => {
+            if (dirt === 0) {
+                coffee += 3 * cps;
+                updateDisplay();
+                saveGame();
+            }
+        }, 3000); // Every 3 seconds
+
+        // Function to Check Maxed Out Upgrades
+        function checkMaxedOut() {
+            // Sparkle Chance Max
+            if (sparkleChance >= 100) {
+                upgradeSparkleBtn.disabled = true;
+                document.querySelector('#upgrade-sparkle p').innerText = "Maxed Out!";
+            } else {
+                upgradeSparkleBtn.disabled = false;
+                document.querySelector('#upgrade-sparkle p').innerText = `${sparkleCost} Coffee`;
+            }
+
+            // Machines Max
+            if (machine1 >= 25) {
+                machine1Btn.disabled = true;
+                document.querySelector('#machine1 p:nth-child(3)').innerText = "Maxed Out!";
+            } else {
+                machine1Btn.disabled = false;
+                document.querySelector('#machine1 p:nth-child(3)').innerText = `Cost: ${machine1Cost} Coffee`;
+            }
+
+            if (machine2 >= 50) {
+                machine2Btn.disabled = true;
+                document.querySelector('#machine2 p:nth-child(3)').innerText = "Maxed Out!";
+            } else {
+                machine2Btn.disabled = false;
+                document.querySelector('#machine2 p:nth-child(3)').innerText = `Cost: ${machine2Cost} Coffee`;
+            }
+
+            if (machine3 >= 100) {
+                machine3Btn.disabled = true;
+                document.querySelector('#machine3 p:nth-child(3)').innerText = "Maxed Out!";
+            } else {
+                machine3Btn.disabled = false;
+                document.querySelector('#machine3 p:nth-child(3)').innerText = `Cost: ${machine3Cost} Coffee`;
+            }
+
+            if (machine4 >= 250) {
+                machine4Btn.disabled = true;
+                document.querySelector('#machine4 p:nth-child(3)').innerText = "Maxed Out!";
+            } else {
+                machine4Btn.disabled = false;
+                document.querySelector('#machine4 p:nth-child(3)').innerText = `Cost: ${machine4Cost} Coffee`;
+            }
+
+            if (machine5 >= 500) {
+                machine5Btn.disabled = true;
+                document.querySelector('#machine5 p:nth-child(3)').innerText = "Maxed Out!";
+            } else {
+                machine5Btn.disabled = false;
+                document.querySelector('#machine5 p:nth-child(3)').innerText = `Cost: ${machine5Cost} Coffee`;
+            }
+        }
+
+        // Reset Game Functionality (Optional)
+        /*
+        const resetButton = document.createElement('button');
+        resetButton.innerText = "🔄 Reset Game";
+        resetButton.style.marginTop = "20px";
+        document.body.appendChild(resetButton);
+
+        resetButton.addEventListener('click', () => {
+            if (confirm("Are you sure you want to reset the game?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        });
+        */
     </script>
 </body>
 </html>
