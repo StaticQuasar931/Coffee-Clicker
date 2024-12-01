@@ -385,8 +385,8 @@
                 cpc: 1,
                 cps: 0,
                 sparkleChance: 0,
-                cpcCost: 5,
-                sparkleCost: 1000,
+                cpcCost: 5,          // Initial CPC Upgrade Cost
+                sparkleCost: 1000,   // Initial Sparkle Chance Upgrade Cost
                 machines: {
                     machine1: { level: 0, cost: 10 },
                     machine2: { level: 0, cost: 25 },
@@ -551,7 +551,7 @@
                 cpcElem.innerText = gameState.cpc;
                 cpsElem.innerText = gameState.cps;
                 sparkleChanceElem.innerText = gameState.sparkleChance;
-                currentSparkleElem.innerText = gameState.sparkleChance; // Fix for F9
+                currentSparkleElem.innerText = gameState.sparkleChance; // Fix for Sparkle Chance Display
 
                 // Update Upgrade Costs
                 document.getElementById('cpc-cost').innerText = formatNumber(gameState.cpcCost || 5);
