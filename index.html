@@ -385,6 +385,8 @@
                 cpc: 1,
                 cps: 0,
                 sparkleChance: 0,
+                cpcCost: 5,
+                sparkleCost: 1000,
                 machines: {
                     machine1: { level: 0, cost: 10 },
                     machine2: { level: 0, cost: 25 },
@@ -437,6 +439,7 @@
             loadGame();
             updateDisplay();
             startAutoSave();
+            startCoffeePerSecond();
 
             // Load Game Data from localStorage or Cookies
             function loadGame() {
@@ -723,6 +726,10 @@
 
             // Add Particle Effect on Coffee Button Click
             function addParticle(button) {
+                const MAX_PARTICLES = 20;
+                const currentParticles = button.querySelectorAll('.particle').length;
+                if (currentParticles >= MAX_PARTICLES) return;
+
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 const rect = button.getBoundingClientRect();
@@ -734,9 +741,6 @@
                     particle.remove();
                 }, 600);
             }
-
-            // Start Coffee Per Second Interval
-            startCoffeePerSecond();
         });
     </script>
 </body>
