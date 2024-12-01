@@ -432,6 +432,17 @@
             let notificationQueue = [];
             let isNotificationVisible = false;
 
+            // Upgrade Timers
+            const upgradeTimers = {
+                cpc: null,
+                sparkle: null,
+                machine1: null,
+                machine2: null,
+                machine3: null,
+                machine4: null,
+                machine5: null
+            };
+
             // Auto-Save Timer
             let autoSaveInterval;
 
@@ -611,35 +622,22 @@
                 saveGame();
             });
 
-            // Upgrade CPC
+            // Upgrade CPC with Controlled Timing
             upgradeCpcBtn.addEventListener('click', () => {
                 const cost = gameState.cpcCost || 5;
                 if (gameState.coffee >= cost) {
-                    gameState.coffee -= cost;
-                    gameState.cpc += 1;
-                    gameState.cpcCost = Math.ceil(cost * costMultipliers.cpc); // Changed to Math.ceil for accurate cost increase
-                    animateButton(upgradeCpcBtn);
-                    showNotification('✨ Coffee per Click Upgraded!');
-                    updateDisplay();
-                    saveGame();
+                    queueUpgrade('cpc');
                 } else {
                     showNotification("❌ Not enough coffee for CPC upgrade!");
                 }
             });
 
-            // Upgrade Sparkle Chance
+            // Upgrade Sparkle Chance with Controlled Timing
             upgradeSparkleBtn.addEventListener('click', () => {
                 const cost = gameState.sparkleCost || 1000;
                 if (gameState.coffee >= cost) {
                     if (gameState.sparkleChance < 100) {
-                        gameState.coffee -= cost;
-                        gameState.sparkleChance += 1;
-                        gameState.sparkleChance = Math.min(gameState.sparkleChance, 100); // Clamp to 100%
-                        gameState.sparkleCost = Math.ceil(cost * costMultipliers.sparkle); // Changed to Math.ceil
-                        animateButton(upgradeSparkleBtn);
-                        showNotification('💫 Sparkle Chance Increased!');
-                        updateDisplay();
-                        saveGame();
+                        queueUpgrade('sparkle');
                     } else {
                         showNotification("✨ Sparkle Chance is already at maximum!");
                     }
@@ -648,20 +646,13 @@
                 }
             });
 
-            // Machine Upgrade Functions
+            // Machine Upgrade Functions with Controlled Timing
             for (let [machine, button] of Object.entries(machineButtons)) {
                 button.addEventListener('click', () => {
                     const machineData = gameState.machines[machine];
                     const cost = machineData.cost;
                     if (gameState.coffee >= cost) {
-                        gameState.coffee -= cost;
-                        machineData.level += 1;
-                        gameState.cps += 1;
-                        machineData.cost = Math.ceil(cost * costMultipliers.machine); // Changed to Math.ceil for accurate cost increase
-                        animateButton(button);
-                        showNotification(`${getMachineName(machine)} Upgraded!`);
-                        updateDisplay();
-                        saveGame();
+                        queueUpgrade(machine);
                     } else {
                         showNotification(`❌ Not enough coffee for ${getMachineName(machine)} upgrade!`);
                     }
@@ -680,13 +671,63 @@
                 return names[machine] || 'Unknown Machine';
             }
 
-            // Periodic Coffee Addition based on CPS (Every 3 seconds)
+            // Queue Upgrade for Controlled Processing
+            function queueUpgrade(upgradeType) {
+                if (upgradeTimers[upgradeType]) {
+                    // Upgrade already queued
+                    showNotification(`🔄 ${capitalizeFirstLetter(upgradeType)} upgrade is already in queue.`);
+                    return;
+                }
+
+                // Add to queue and set timer
+                upgradeTimers[upgradeType] = setTimeout(() => {
+                    applyUpgrade(upgradeType);
+                    upgradeTimers[upgradeType] = null;
+                }, 5000); // 5 seconds delay
+
+                showNotification(`⏳ ${capitalizeFirstLetter(upgradeType)} upgrade will be applied in 5 seconds.`);
+            }
+
+            // Apply Upgrade
+            function applyUpgrade(upgradeType) {
+                if (upgradeType === 'cpc') {
+                    const cost = gameState.cpcCost || 5;
+                    gameState.coffee -= cost;
+                    gameState.cpc += 1;
+                    gameState.cpcCost = Math.ceil(cost * costMultipliers.cpc);
+                    showNotification('✨ Coffee per Click Upgraded!');
+                } else if (upgradeType === 'sparkle') {
+                    const cost = gameState.sparkleCost || 1000;
+                    gameState.coffee -= cost;
+                    gameState.sparkleChance += 1;
+                    gameState.sparkleChance = Math.min(gameState.sparkleChance, 100);
+                    gameState.sparkleCost = Math.ceil(cost * costMultipliers.sparkle);
+                    showNotification('💫 Sparkle Chance Increased!');
+                } else {
+                    // Machines
+                    const machineData = gameState.machines[upgradeType];
+                    gameState.coffee -= machineData.cost;
+                    machineData.level += 1;
+                    gameState.cps += 1;
+                    machineData.cost = Math.ceil(machineData.cost * costMultipliers.machine);
+                    showNotification(`${getMachineName(upgradeType)} Upgraded!`);
+                }
+                updateDisplay();
+                saveGame();
+            }
+
+            // Capitalize First Letter
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+            // Periodic Coffee Addition based on CPS (Every 1 second)
             function startCoffeePerSecond() {
                 setInterval(() => {
-                    gameState.coffee += 3 * gameState.cps;
+                    gameState.coffee += gameState.cps;
                     updateDisplay();
                     saveGame();
-                }, 3000); // Every 3 seconds
+                }, 1000); // Every 1 second
             }
 
             // Auto-Save Functionality (Every 10 seconds)
@@ -741,6 +782,26 @@
                     particle.remove();
                 }, 600);
             }
+
+            // Stop Upgrades when User Stops Clicking
+            let clickTimeout;
+            const CLICK_DELAY = 1000; // 1 second after last click
+
+            // Monitor Upgrade Button Clicks
+            const allUpgradeButtons = [upgradeCpcBtn, upgradeSparkleBtn, ...Object.values(machineButtons)];
+
+            allUpgradeButtons.forEach(button => {
+                button.addEventListener('mousedown', () => {
+                    clearTimeout(clickTimeout);
+                });
+
+                button.addEventListener('mouseup', () => {
+                    clickTimeout = setTimeout(() => {
+                        // If no clicks occurred in the last CLICK_DELAY, do nothing
+                        // Upgrades are already queued with 5 seconds delay
+                    }, CLICK_DELAY);
+                });
+            });
         });
     </script>
 </body>
