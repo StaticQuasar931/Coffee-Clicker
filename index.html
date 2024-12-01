@@ -34,6 +34,8 @@
             justify-content: center;
             margin-bottom: 20px;
             flex-wrap: wrap;
+            width: 100%;
+            max-width: 800px;
         }
 
         .tab {
@@ -45,6 +47,8 @@
             cursor: pointer;
             transition: background-color 0.3s;
             font-size: 1em;
+            flex: 1;
+            text-align: center;
         }
 
         .tab.active {
@@ -189,6 +193,18 @@
             #coffee-button {
                 width: 90%;
             }
+
+            .stats p {
+                font-size: 1em;
+            }
+
+            .upgrade h3, .machine h3 {
+                font-size: 1.1em;
+            }
+
+            .upgrade p, .machine p {
+                font-size: 0.9em;
+            }
         }
     </style>
 </head>
@@ -305,14 +321,12 @@
         let machine4Cost = 100;
         let machine5Cost = 250;
 
-        // Constants
-        const diamondCost = 25;
-
         // DOM Elements
         const coffeeCountElem = document.getElementById('coffee-count');
         const cpcElem = document.getElementById('cpc');
         const cpsElem = document.getElementById('cps');
         const sparkleChanceElem = document.getElementById('sparkleChance');
+        const currentSparkleElem = document.getElementById('current-sparkle');
 
         const upgradeCpcBtn = document.getElementById('upgrade-cpc-btn');
         const upgradeSparkleBtn = document.getElementById('upgrade-sparkle-btn');
@@ -334,6 +348,7 @@
         window.onload = () => {
             loadGame();
             updateDisplay();
+            startAutoSave();
         };
 
         // Load Game Data from localStorage with Validation
@@ -409,13 +424,11 @@
             cpcElem.innerText = cpc;
             cpsElem.innerText = cps;
             sparkleChanceElem.innerText = sparkleChance;
+            currentSparkleElem.innerText = sparkleChance;
 
             // Update Upgrade Costs
             document.getElementById('cpc-cost').innerText = cpcCost;
             document.getElementById('sparkle-cost').innerText = sparkleCost;
-
-            // Update Sparkle Chance Display
-            document.getElementById('current-sparkle').innerText = sparkleChance;
 
             // Update Machine Levels and Costs
             document.getElementById('machine1-level').innerText = machine1;
@@ -444,8 +457,8 @@
         }
 
         // Coffee Button Click
-        document.getElementById('coffee-button').addEventListener('click', () => {
-            const chance = Math.random() * 1000;
+        coffeeButton.addEventListener('click', () => {
+            const chance = Math.random() * 100;
             if (chance < sparkleChance) {
                 coffee += cpc * 2;
                 showNotification('✨ SPARKLING COFFEE CLICK! Double Coffee Earned!');
@@ -580,6 +593,13 @@
             updateDisplay();
             saveGame();
         }, 3000); // Every 3 seconds
+
+        // Auto-Save Functionality (Every 10 seconds)
+        function startAutoSave() {
+            setInterval(() => {
+                saveGame();
+            }, 10000); // Every 10 seconds
+        }
 
         // Tab Navigation
         tabs.forEach(tab => {
