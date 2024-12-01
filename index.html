@@ -77,7 +77,7 @@
             margin: 20px 0;
         }
 
-        .upgrade, .machine, .shop-item {
+        .upgrade, .machine {
             background-color: #2e2e2e;
             padding: 15px;
             margin: 15px auto;
@@ -88,18 +88,18 @@
             text-align: left;
         }
 
-        .upgrade h3, .machine h3, .shop-item h3 {
+        .upgrade h3, .machine h3 {
             margin-bottom: 10px;
             font-size: 1.3em;
             color: #FFD700;
         }
 
-        .upgrade p, .machine p, .shop-item p {
+        .upgrade p, .machine p {
             margin: 5px 0;
             font-size: 1em;
         }
 
-        .upgrade button, .machine button, .shop-item button {
+        .upgrade button, .machine button {
             width: 100%;
             padding: 10px;
             font-size: 1em;
@@ -108,9 +108,11 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+            background-color: #4CAF50;
+            color: #fff;
         }
 
-        .upgrade button:hover, .machine button:hover, .shop-item button:hover {
+        .upgrade button:hover, .machine button:hover {
             background-color: #45a049;
         }
 
@@ -180,7 +182,7 @@
                 width: 80%;
             }
 
-            .upgrade, .machine, .shop-item {
+            .upgrade, .machine {
                 width: 90%;
             }
 
@@ -198,7 +200,6 @@
         <div class="tab active" data-tab="stats">📊 Stats</div>
         <div class="tab" data-tab="upgrades">🔧 Upgrades</div>
         <div class="tab" data-tab="machines">🛠️ Machines</div>
-        <div class="tab" data-tab="shop">🛒 Shop</div>
     </div>
 
     <!-- Tab Contents -->
@@ -208,7 +209,6 @@
             <p>✨ <strong>Coffee per Click (CPC):</strong> <span id="cpc">1</span></p>
             <p>⏱️ <strong>Coffee per Second (CPS):</strong> <span id="cps">0</span></p>
             <p>💫 <strong>Sparkle Chance:</strong> <span id="sparkleChance">0</span>%</p>
-            <p>🪨 <strong>Dirt Status:</strong> <span id="dirtStatus">Clean</span></p>
         </div>
     </div>
 
@@ -270,30 +270,6 @@
         </div>
     </div>
 
-    <div id="shop" class="tab-content">
-        <div class="section">
-            <div class="shop-item" id="shop-diamond">
-                <h3>💎 Buy Diamond Block</h3>
-                <p><strong>Effect:</strong> Adds 1 Diamond Block to your inventory.</p>
-                <p><strong>Cost:</strong> 25 Coffee</p>
-                <button id="shop-diamond-btn">Buy Diamond Block</button>
-            </div>
-            <!-- Future Shop Items (Coming Soon) -->
-            <div class="shop-item" style="display:none;">
-                <h3>🔮 Buy Emerald Block</h3>
-                <p><strong>Effect:</strong> Adds 1 Emerald Block to your inventory.</p>
-                <p><strong>Cost:</strong> 50 Coffee</p>
-                <button disabled>Buy Emerald Block</button>
-            </div>
-            <div class="shop-item" style="display:none;">
-                <h3>🟡 Buy Gold Block</h3>
-                <p><strong>Effect:</strong> Adds 1 Gold Block to your inventory.</p>
-                <p><strong>Cost:</strong> 100 Coffee</p>
-                <button disabled>Buy Gold Block</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Coffee Click Button -->
     <button id="coffee-button">☕ Click Me!</button>
 
@@ -312,7 +288,6 @@
         let cpc = 1;
         let cps = 0;
         let sparkleChance = 0;
-        let dirt = 0;
 
         let machine1 = 0;
         let machine2 = 0;
@@ -330,6 +305,7 @@
         let machine4Cost = 100;
         let machine5Cost = 250;
 
+        // Constants
         const diamondCost = 25;
 
         // DOM Elements
@@ -337,7 +313,6 @@
         const cpcElem = document.getElementById('cpc');
         const cpsElem = document.getElementById('cps');
         const sparkleChanceElem = document.getElementById('sparkleChance');
-        const dirtStatusElem = document.getElementById('dirtStatus');
 
         const upgradeCpcBtn = document.getElementById('upgrade-cpc-btn');
         const upgradeSparkleBtn = document.getElementById('upgrade-sparkle-btn');
@@ -348,7 +323,7 @@
         const machine4Btn = document.getElementById('machine4-btn');
         const machine5Btn = document.getElementById('machine5-btn');
 
-        const shopDiamondBtn = document.getElementById('shop-diamond-btn');
+        const coffeeButton = document.getElementById('coffee-button');
 
         const notification = document.getElementById('notification');
 
@@ -367,7 +342,6 @@
             cpc = parseInt(localStorage.getItem('cpc'));
             cps = parseInt(localStorage.getItem('cps'));
             sparkleChance = parseInt(localStorage.getItem('sparkleChance'));
-            dirt = parseInt(localStorage.getItem('dirt'));
 
             machine1 = parseInt(localStorage.getItem('machine1'));
             machine2 = parseInt(localStorage.getItem('machine2'));
@@ -389,7 +363,6 @@
             cpc = isNaN(cpc) ? 1 : cpc;
             cps = isNaN(cps) ? 0 : cps;
             sparkleChance = isNaN(sparkleChance) ? 0 : sparkleChance;
-            dirt = isNaN(dirt) ? 0 : dirt;
 
             machine1 = isNaN(machine1) ? 0 : machine1;
             machine2 = isNaN(machine2) ? 0 : machine2;
@@ -413,7 +386,6 @@
             localStorage.setItem('cpc', cpc);
             localStorage.setItem('cps', cps);
             localStorage.setItem('sparkleChance', sparkleChance);
-            localStorage.setItem('dirt', dirt);
 
             localStorage.setItem('machine1', machine1);
             localStorage.setItem('machine2', machine2);
@@ -437,7 +409,6 @@
             cpcElem.innerText = cpc;
             cpsElem.innerText = cps;
             sparkleChanceElem.innerText = sparkleChance;
-            dirtStatusElem.innerText = dirt === 0 ? "Clean" : "Infested";
 
             // Update Upgrade Costs
             document.getElementById('cpc-cost').innerText = cpcCost;
@@ -458,10 +429,6 @@
             document.getElementById('machine5-level').innerText = machine5;
             document.getElementById('machine5-cost').innerText = machine5Cost;
 
-            // Update Shop Items (Enable or disable based on availability)
-            // Currently only Diamond Block is available
-            // Future items can be enabled here
-
             // Disable buttons if maxed out
             checkMaxedOut();
         }
@@ -478,25 +445,12 @@
 
         // Coffee Button Click
         document.getElementById('coffee-button').addEventListener('click', () => {
-            if (dirt === 0) {
-                const chance = Math.random() * 1000;
-                if (chance < sparkleChance) {
-                    coffee += cpc * 2;
-                    showNotification('✨ SPARKLING COFFEE CLICK! Double Coffee Earned!');
-                } else {
-                    coffee += cpc;
-                }
-
-                // Chance to get dirt after high CPC
-                if (cpc > 150) {
-                    const dirtChance = Math.random() * 1000;
-                    if (dirtChance < 1) { // 0.1% chance
-                        dirt = 1;
-                        showNotification('🪨 Coffee Beans Infested! Reopen Stats to Clean.');
-                    }
-                }
+            const chance = Math.random() * 1000;
+            if (chance < sparkleChance) {
+                coffee += cpc * 2;
+                showNotification('✨ SPARKLING COFFEE CLICK! Double Coffee Earned!');
             } else {
-                showNotification('🪨 Coffee Beans are infested! Reopen Stats to Clean.');
+                coffee += cpc;
             }
             updateDisplay();
             saveGame();
@@ -620,25 +574,11 @@
             }
         });
 
-        // Shop - Buy Diamond Block
-        shopDiamondBtn.addEventListener('click', () => {
-            if (coffee >= diamondCost) {
-                coffee -= diamondCost;
-                updateDisplay();
-                showNotification('💎 Diamond Block Purchased!');
-                // Implement additional functionality as needed
-            } else {
-                showNotification("❌ Not enough coffee to buy Diamond Block!");
-            }
-        });
-
         // Periodic Coffee Addition based on CPS (Every 3 seconds)
         setInterval(() => {
-            if (dirt === 0) {
-                coffee += 3 * cps;
-                updateDisplay();
-                saveGame();
-            }
+            coffee += 3 * cps;
+            updateDisplay();
+            saveGame();
         }, 3000); // Every 3 seconds
 
         // Tab Navigation
@@ -651,15 +591,6 @@
                 tabContents.forEach(content => {
                     if(content.id === target) {
                         content.classList.add('active');
-                        // Reset Dirt status when opening Stats tab
-                        if(target === 'stats') {
-                            if(dirt === 1) {
-                                dirt = 0;
-                                showNotification('🧹 Dirt has been cleaned! Resume clicking.');
-                                updateDisplay();
-                                saveGame();
-                            }
-                        }
                     } else {
                         content.classList.remove('active');
                     }
