@@ -90,6 +90,7 @@
             width: 100%;
             max-width: 700px;
             text-align: left;
+            position: relative;
         }
 
         .upgrade h3, .machine h3 {
@@ -111,7 +112,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s;
             background-color: #4CAF50;
             color: #fff;
         }
@@ -127,6 +128,11 @@
             opacity: 0.6;
         }
 
+        /* Button Click Animation */
+        .button-click {
+            transform: scale(0.95);
+        }
+
         /* Coffee Click Button */
         #coffee-button {
             background-color: #D2691E;
@@ -136,12 +142,16 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s;
             margin-bottom: 20px;
         }
 
         #coffee-button:hover {
             background-color: #CD853F;
+        }
+
+        #coffee-button:active {
+            transform: scale(0.95);
         }
 
         /* Notification */
@@ -452,10 +462,12 @@
             // Show Notification
             function showNotification(message) {
                 notification.innerText = message;
+                notification.classList.add('show');
                 notification.style.display = 'block';
                 clearTimeout(notification.timeout);
                 notification.timeout = setTimeout(() => {
                     notification.style.display = 'none';
+                    notification.classList.remove('show');
                 }, 3000);
             }
 
@@ -468,6 +480,7 @@
                 } else {
                     coffee += cpc;
                 }
+                animateButton(coffeeButton);
                 updateDisplay();
                 saveGame();
             });
@@ -478,6 +491,7 @@
                     coffee -= cpcCost;
                     cpc += 1;
                     cpcCost = Math.round(cpcCost * 1.06); // buildingcostlow multiplier
+                    animateButton(upgradeCpcBtn);
                     updateDisplay();
                     showNotification('✨ Coffee per Click Upgraded!');
                     saveGame();
@@ -494,6 +508,7 @@
                         sparkleChance += 1;
                         sparkleChance = Math.min(sparkleChance, 100); // Cap at 100%
                         sparkleCost = Math.round(sparkleCost * 1.15); // buildingcostextreme multiplier
+                        animateButton(upgradeSparkleBtn);
                         updateDisplay();
                         showNotification('💫 Sparkle Chance Increased!');
                         saveGame();
@@ -512,6 +527,7 @@
                     machine1 += 1;
                     cps += 1;
                     machine1Cost = Math.round(machine1Cost * 1.1); // buildingcost multiplier
+                    animateButton(machine1Btn);
                     updateDisplay();
                     showNotification('🛠️ Coffee Beans Machine Upgraded!');
                     saveGame();
@@ -529,6 +545,7 @@
                     machine2 += 1;
                     cps += 1;
                     machine2Cost = Math.round(machine2Cost * 1.1); // buildingcost multiplier
+                    animateButton(machine2Btn);
                     updateDisplay();
                     showNotification('📄 Coffee Filters Machine Upgraded!');
                     saveGame();
@@ -546,6 +563,7 @@
                     machine3 += 1;
                     cps += 1;
                     machine3Cost = Math.round(machine3Cost * 1.1); // buildingcost multiplier
+                    animateButton(machine3Btn);
                     updateDisplay();
                     showNotification('🌸 Coffee Cups Machine Upgraded!');
                     saveGame();
@@ -563,6 +581,7 @@
                     machine4 += 1;
                     cps += 1;
                     machine4Cost = Math.round(machine4Cost * 1.1); // buildingcost multiplier
+                    animateButton(machine4Btn);
                     updateDisplay();
                     showNotification('🧂 Coffee Creamer Machine Upgraded!');
                     saveGame();
@@ -580,6 +599,7 @@
                     machine5 += 1;
                     cps += 1;
                     machine5Cost = Math.round(machine5Cost * 1.1); // buildingcost multiplier
+                    animateButton(machine5Btn);
                     updateDisplay();
                     showNotification('🔥 Coffee Heater Machine Upgraded!');
                     saveGame();
@@ -652,6 +672,14 @@
                     const costElem = machineElem.querySelector('p:nth-child(3)');
                     costElem.innerText = `Cost: ${machineCost} Coffee`;
                 }
+            }
+
+            // Animate Button Click
+            function animateButton(button) {
+                button.classList.add('button-click');
+                setTimeout(() => {
+                    button.classList.remove('button-click');
+                }, 100);
             }
         });
     </script>
