@@ -398,9 +398,9 @@
 
             // Cost Multipliers
             const costMultipliers = {
-                cpc: 1.06,
-                sparkle: 1.15,
-                machine: 1.1
+                cpc: 1.06,      // Multiplier for CPC upgrades
+                sparkle: 1.15,  // Multiplier for Sparkle Chance upgrades
+                machine: 1.1    // Multiplier for Machine upgrades
             };
 
             // DOM Elements
@@ -617,7 +617,7 @@
                 if (gameState.coffee >= cost) {
                     gameState.coffee -= cost;
                     gameState.cpc += 1;
-                    gameState.cpcCost = Math.round(cost * costMultipliers.cpc);
+                    gameState.cpcCost = Math.ceil(cost * costMultipliers.cpc); // Changed to Math.ceil for accurate cost increase
                     animateButton(upgradeCpcBtn);
                     showNotification('✨ Coffee per Click Upgraded!');
                     updateDisplay();
@@ -635,7 +635,7 @@
                         gameState.coffee -= cost;
                         gameState.sparkleChance += 1;
                         gameState.sparkleChance = Math.min(gameState.sparkleChance, 100); // Clamp to 100%
-                        gameState.sparkleCost = Math.round(cost * costMultipliers.sparkle);
+                        gameState.sparkleCost = Math.ceil(cost * costMultipliers.sparkle); // Changed to Math.ceil
                         animateButton(upgradeSparkleBtn);
                         showNotification('💫 Sparkle Chance Increased!');
                         updateDisplay();
@@ -657,7 +657,7 @@
                         gameState.coffee -= cost;
                         machineData.level += 1;
                         gameState.cps += 1;
-                        machineData.cost = Math.round(cost * costMultipliers.machine);
+                        machineData.cost = Math.ceil(cost * costMultipliers.machine); // Changed to Math.ceil for accurate cost increase
                         animateButton(button);
                         showNotification(`${getMachineName(machine)} Upgraded!`);
                         updateDisplay();
