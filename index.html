@@ -255,7 +255,7 @@
             /* Machines in Two Columns */
             .machines-grid {
                 display: grid;
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
                 gap: 20px;
             }
         }
@@ -444,6 +444,7 @@
             function saveGame() {
                 if (isLocalStorageAvailable()) {
                     try {
+                        // Primary Save
                         localStorage.setItem('coffee', coffee);
                         localStorage.setItem('cpc', cpc);
                         localStorage.setItem('cps', cps);
@@ -463,6 +464,27 @@
                         localStorage.setItem('machine3Cost', machine3Cost);
                         localStorage.setItem('machine4Cost', machine4Cost);
                         localStorage.setItem('machine5Cost', machine5Cost);
+
+                        // Backup Save
+                        localStorage.setItem('coffee_backup', coffee);
+                        localStorage.setItem('cpc_backup', cpc);
+                        localStorage.setItem('cps_backup', cps);
+                        localStorage.setItem('sparkleChance_backup', sparkleChance);
+
+                        localStorage.setItem('machine1_backup', machine1);
+                        localStorage.setItem('machine2_backup', machine2);
+                        localStorage.setItem('machine3_backup', machine3);
+                        localStorage.setItem('machine4_backup', machine4);
+                        localStorage.setItem('machine5_backup', machine5);
+
+                        localStorage.setItem('cpcCost_backup', cpcCost);
+                        localStorage.setItem('sparkleCost_backup', sparkleCost);
+
+                        localStorage.setItem('machine1Cost_backup', machine1Cost);
+                        localStorage.setItem('machine2Cost_backup', machine2Cost);
+                        localStorage.setItem('machine3Cost_backup', machine3Cost);
+                        localStorage.setItem('machine4Cost_backup', machine4Cost);
+                        localStorage.setItem('machine5Cost_backup', machine5Cost);
                     } catch (e) {
                         console.warn('Failed to save to LocalStorage.', e);
                         showNotification('⚠️ Failed to save progress.');
@@ -508,7 +530,7 @@
                 document.getElementById('machine5-cost').innerText = formatNumber(machine5Cost);
 
                 // Disable buttons if maxed out (Removed as limits are removed)
-                // But if there are other conditions to disable, handle here
+                // But if there are other conditions to disable buttons, handle here
                 checkButtons();
             }
 
@@ -706,6 +728,7 @@
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 const rect = button.getBoundingClientRect();
+                // Random position within the button
                 particle.style.left = `${Math.random() * rect.width}px`;
                 particle.style.top = `${Math.random() * rect.height}px`;
                 button.appendChild(particle);
