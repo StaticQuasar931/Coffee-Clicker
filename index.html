@@ -15,45 +15,66 @@
             background-color: #2b2b2b;
             color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
             color: #4CAF50;
             margin-bottom: 20px;
             font-size: 2.5em;
+            text-align: center;
         }
 
-        .stats, .upgrades, .machines, .shop {
-            margin: 20px 0;
-            padding: 15px;
+        /* Tab Navigation */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
             background-color: #3e3e3e;
-            border-radius: 10px;
-            display: inline-block;
-            width: 90%;
-            max-width: 800px;
+            border: 2px solid #4CAF50;
+            border-radius: 10px 10px 0 0;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1em;
         }
 
-        .stats p, .upgrade p, .machine p, .shop-item p {
+        .tab.active {
+            background-color: #4CAF50;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            width: 100%;
+            max-width: 800px;
+            background-color: #3e3e3e;
+            border: 2px solid #4CAF50;
+            border-radius: 0 10px 10px 10px;
+            padding: 20px;
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Stats Section */
+        .stats p {
             margin: 10px 0;
             font-size: 1.2em;
         }
 
-        button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            margin: 10px 5px;
-            font-size: 1em;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #45a049;
+        /* Upgrades and Machines Sections */
+        .section {
+            margin: 20px 0;
         }
 
         .upgrade, .machine, .shop-item {
@@ -62,70 +83,65 @@
             margin: 15px auto;
             border: 2px solid #4CAF50;
             border-radius: 10px;
-            width: 80%;
+            width: 100%;
+            max-width: 700px;
+            text-align: left;
         }
 
         .upgrade h3, .machine h3, .shop-item h3 {
             margin-bottom: 10px;
+            font-size: 1.3em;
+            color: #FFD700;
         }
 
+        .upgrade p, .machine p, .shop-item p {
+            margin: 5px 0;
+            font-size: 1em;
+        }
+
+        .upgrade button, .machine button, .shop-item button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        /* Coffee Click Button */
+        #coffee-button {
+            background-color: #D2691E;
+            color: #fff;
+            font-size: 1.5em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+
+        #coffee-button:hover {
+            background-color: #CD853F;
+        }
+
+        /* Notification */
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
             background-color: rgba(0,0,0,0.8);
             color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 15px 25px;
+            border-radius: 10px;
             display: none;
             z-index: 1000;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 500; 
-            padding-top: 100px; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0,0,0,0.7); 
-        }
-
-        .modal-content {
-            background-color: #3e3e3e;
-            margin: auto;
-            padding: 20px;
-            border: 2px solid #4CAF50;
-            width: 80%;
-            max-width: 600px;
-            border-radius: 10px;
-            position: relative;
-        }
-
-        .close {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 25px;
-            font-size: 30px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: #fff;
-            text-decoration: none;
+            font-size: 1em;
         }
 
         /* Footer Styles */
         footer {
             margin-top: 30px;
             font-size: 0.9em;
+            text-align: center;
         }
 
         footer a {
@@ -137,15 +153,24 @@
             text-decoration: underline;
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            .stats, .upgrades, .machines, .shop, .upgrade, .machine, .shop-item {
-                width: 95%;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+                align-items: center;
             }
 
-            button {
+            .tab {
+                margin: 5px 0;
                 width: 80%;
-                margin: 10px auto;
+            }
+
+            .upgrade, .machine, .shop-item {
+                width: 90%;
+            }
+
+            #coffee-button {
+                width: 90%;
             }
         }
     </style>
@@ -153,88 +178,109 @@
 <body>
     <h1>☕ Coffee Clicker ☕</h1>
 
-    <!-- Coffee Stats -->
-    <div class="stats">
-        <p>👥 Coffee: <span id="coffee-count">0</span></p>
-        <p>✨ Coffee per Click (CPC): <span id="cpc">1</span></p>
-        <p>⏱️ Coffee per Second (CPS): <span id="cps">0</span></p>
-        <p>💫 Sparkle Chance: <span id="sparkleChance">0</span>%</p>
-        <p>🪨 Dirt Status: <span id="dirtStatus">Clean</span></p>
+    <!-- Tab Navigation -->
+    <div class="tabs">
+        <div class="tab active" data-tab="stats">📊 Stats</div>
+        <div class="tab" data-tab="upgrades">🔧 Upgrades</div>
+        <div class="tab" data-tab="machines">🛠️ Machines</div>
+        <div class="tab" data-tab="shop">🛒 Shop</div>
+    </div>
+
+    <!-- Tab Contents -->
+    <div id="stats" class="tab-content active">
+        <div class="stats">
+            <p>👥 <strong>Coffee:</strong> <span id="coffee-count">0</span></p>
+            <p>✨ <strong>Coffee per Click (CPC):</strong> <span id="cpc">1</span></p>
+            <p>⏱️ <strong>Coffee per Second (CPS):</strong> <span id="cps">0</span></p>
+            <p>💫 <strong>Sparkle Chance:</strong> <span id="sparkleChance">0</span>%</p>
+            <p>🪨 <strong>Dirt Status:</strong> <span id="dirtStatus">Clean</span></p>
+        </div>
+    </div>
+
+    <div id="upgrades" class="tab-content">
+        <div class="section">
+            <div class="upgrade" id="upgrade-cpc">
+                <h3>✨ Increase CPC</h3>
+                <p><strong>Effect:</strong> Increase Coffee per Click by 1.</p>
+                <p><strong>Cost:</strong> <span id="cpc-cost">5</span> Coffee</p>
+                <button id="upgrade-cpc-btn">Upgrade CPC</button>
+            </div>
+            <div class="upgrade" id="upgrade-sparkle">
+                <h3>💫 Increase Sparkle Chance</h3>
+                <p><strong>Effect:</strong> Chance to earn double coffee per click.</p>
+                <p><strong>Current Sparkle Chance:</strong> <span id="current-sparkle">0</span>%</p>
+                <p><strong>Cost:</strong> <span id="sparkle-cost">1000</span> Coffee</p>
+                <button id="upgrade-sparkle-btn">Upgrade Sparkle Chance</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="machines" class="tab-content">
+        <div class="section">
+            <div class="machine" id="machine1">
+                <h3>🛠️ Coffee Beans</h3>
+                <p><strong>Level:</strong> <span id="machine1-level">0</span>/25</p>
+                <p><strong>Effect:</strong> Grants +1 CPS</p>
+                <p><strong>Cost:</strong> <span id="machine1-cost">10</span> Coffee</p>
+                <button id="machine1-btn">Upgrade Coffee Beans</button>
+            </div>
+            <div class="machine" id="machine2">
+                <h3>📄 Coffee Filters</h3>
+                <p><strong>Level:</strong> <span id="machine2-level">0</span>/50</p>
+                <p><strong>Effect:</strong> Grants +1 CPS</p>
+                <p><strong>Cost:</strong> <span id="machine2-cost">25</span> Coffee</p>
+                <button id="machine2-btn">Upgrade Coffee Filters</button>
+            </div>
+            <div class="machine" id="machine3">
+                <h3>🌸 Coffee Cups</h3>
+                <p><strong>Level:</strong> <span id="machine3-level">0</span>/100</p>
+                <p><strong>Effect:</strong> Grants +1 CPS</p>
+                <p><strong>Cost:</strong> <span id="machine3-cost">50</span> Coffee</p>
+                <button id="machine3-btn">Upgrade Coffee Cups</button>
+            </div>
+            <div class="machine" id="machine4">
+                <h3>🧂 Coffee Creamer</h3>
+                <p><strong>Level:</strong> <span id="machine4-level">0</span>/250</p>
+                <p><strong>Effect:</strong> Grants +1 CPS</p>
+                <p><strong>Cost:</strong> <span id="machine4-cost">100</span> Coffee</p>
+                <button id="machine4-btn">Upgrade Coffee Creamer</button>
+            </div>
+            <div class="machine" id="machine5">
+                <h3>🔥 Coffee Heater</h3>
+                <p><strong>Level:</strong> <span id="machine5-level">0</span>/500</p>
+                <p><strong>Effect:</strong> Grants +1 CPS</p>
+                <p><strong>Cost:</strong> <span id="machine5-cost">250</span> Coffee</p>
+                <button id="machine5-btn">Upgrade Coffee Heater</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="shop" class="tab-content">
+        <div class="section">
+            <div class="shop-item" id="shop-diamond">
+                <h3>💎 Buy Diamond Block</h3>
+                <p><strong>Effect:</strong> Adds 1 Diamond Block to your inventory.</p>
+                <p><strong>Cost:</strong> 25 Coffee</p>
+                <button id="shop-diamond-btn">Buy Diamond Block</button>
+            </div>
+            <!-- Future Shop Items (Coming Soon) -->
+            <div class="shop-item" style="display:none;">
+                <h3>🔮 Buy Emerald Block</h3>
+                <p><strong>Effect:</strong> Adds 1 Emerald Block to your inventory.</p>
+                <p><strong>Cost:</strong> 50 Coffee</p>
+                <button disabled>Buy Emerald Block</button>
+            </div>
+            <div class="shop-item" style="display:none;">
+                <h3>🟡 Buy Gold Block</h3>
+                <p><strong>Effect:</strong> Adds 1 Gold Block to your inventory.</p>
+                <p><strong>Cost:</strong> 100 Coffee</p>
+                <button disabled>Buy Gold Block</button>
+            </div>
+        </div>
     </div>
 
     <!-- Coffee Click Button -->
     <button id="coffee-button">☕ Click Me!</button>
-
-    <!-- Upgrades Section -->
-    <div class="upgrades">
-        <h2>🔧 Upgrades</h2>
-        <div class="upgrade" id="upgrade-cpc">
-            <h3>✨ Increase CPC</h3>
-            <p>Cost: <span id="cpc-cost">5</span> Coffee</p>
-            <button>Upgrade CPC</button>
-        </div>
-        <div class="upgrade" id="upgrade-sparkle">
-            <h3>💫 Increase Sparkle Chance</h3>
-            <p>Cost: <span id="sparkle-cost">1000</span> Coffee</p>
-            <button>Upgrade Sparkle Chance</button>
-        </div>
-    </div>
-
-    <!-- Machines Section -->
-    <div class="machines">
-        <h2>🛠️ Coffee Machines</h2>
-        <div class="machine" id="machine1">
-            <h3>🛠️ Coffee Beans</h3>
-            <p>Level: <span id="machine1-level">0</span>/25</p>
-            <p>Grants +1 CPS</p>
-            <p>Cost: <span id="machine1-cost">10</span> Coffee</p>
-            <button>Upgrade Coffee Beans</button>
-        </div>
-        <div class="machine" id="machine2">
-            <h3>📄 Coffee Filters</h3>
-            <p>Level: <span id="machine2-level">0</span>/50</p>
-            <p>Grants +1 CPS</p>
-            <p>Cost: <span id="machine2-cost">25</span> Coffee</p>
-            <button>Upgrade Coffee Filters</button>
-        </div>
-        <div class="machine" id="machine3">
-            <h3>🌸 Coffee Cups</h3>
-            <p>Level: <span id="machine3-level">0</span>/100</p>
-            <p>Grants +1 CPS</p>
-            <p>Cost: <span id="machine3-cost">50</span> Coffee</p>
-            <button>Upgrade Coffee Cups</button>
-        </div>
-        <div class="machine" id="machine4">
-            <h3>🧂 Coffee Creamer</h3>
-            <p>Level: <span id="machine4-level">0</span>/250</p>
-            <p>Grants +1 CPS</p>
-            <p>Cost: <span id="machine4-cost">100</span> Coffee</p>
-            <button>Upgrade Coffee Creamer</button>
-        </div>
-        <div class="machine" id="machine5">
-            <h3>🔥 Coffee Heater</h3>
-            <p>Level: <span id="machine5-level">0</span>/500</p>
-            <p>Grants +1 CPS</p>
-            <p>Cost: <span id="machine5-cost">250</span> Coffee</p>
-            <button>Upgrade Coffee Heater</button>
-        </div>
-    </div>
-
-    <!-- Shop Section -->
-    <div class="shop">
-        <h2>🛒 Coffee Shop</h2>
-        <div class="shop-item" id="shop-diamond">
-            <h3>💎 Buy Diamond Block</h3>
-            <p>Cost: 25 Coffee</p>
-            <button>Buy Diamond Block</button>
-        </div>
-        <!-- Future Shop Items (Coming Soon) -->
-        <div class="shop-item" style="display:none;">
-            <h3>🔮 Future Item</h3>
-            <p>Coming Soon!</p>
-            <button disabled>Unavailable</button>
-        </div>
-    </div>
 
     <!-- Notification -->
     <div class="notification" id="notification"></div>
@@ -278,51 +324,51 @@
         const sparkleChanceElem = document.getElementById('sparkleChance');
         const dirtStatusElem = document.getElementById('dirtStatus');
 
-        const coffeeButton = document.getElementById('coffee-button');
+        const upgradeCpcBtn = document.getElementById('upgrade-cpc-btn');
+        const upgradeSparkleBtn = document.getElementById('upgrade-sparkle-btn');
 
-        const upgradeCpcBtn = document.querySelector('#upgrade-cpc button');
-        const upgradeSparkleBtn = document.querySelector('#upgrade-sparkle button');
+        const machine1Btn = document.getElementById('machine1-btn');
+        const machine2Btn = document.getElementById('machine2-btn');
+        const machine3Btn = document.getElementById('machine3-btn');
+        const machine4Btn = document.getElementById('machine4-btn');
+        const machine5Btn = document.getElementById('machine5-btn');
 
-        const machine1Btn = document.querySelector('#machine1 button');
-        const machine2Btn = document.querySelector('#machine2 button');
-        const machine3Btn = document.querySelector('#machine3 button');
-        const machine4Btn = document.querySelector('#machine4 button');
-        const machine5Btn = document.querySelector('#machine5 button');
-
-        const shopDiamondBtn = document.querySelector('#shop-diamond button');
+        const shopDiamondBtn = document.getElementById('shop-diamond-btn');
 
         const notification = document.getElementById('notification');
 
-        // Load Game Data from localStorage
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Initialize Game
         window.onload = () => {
-            if (localStorage.getItem('coffee')) {
-                coffee = parseInt(localStorage.getItem('coffee'));
-                cpc = parseInt(localStorage.getItem('cpc'));
-                cps = parseInt(localStorage.getItem('cps'));
-                sparkleChance = parseInt(localStorage.getItem('sparkleChance'));
-                dirt = parseInt(localStorage.getItem('dirt'));
-
-                machine1 = parseInt(localStorage.getItem('machine1')) || 0;
-                machine2 = parseInt(localStorage.getItem('machine2')) || 0;
-                machine3 = parseInt(localStorage.getItem('machine3')) || 0;
-                machine4 = parseInt(localStorage.getItem('machine4')) || 0;
-                machine5 = parseInt(localStorage.getItem('machine5')) || 0;
-
-                cpcCost = parseInt(localStorage.getItem('cpcCost')) || 5;
-                sparkleCost = parseInt(localStorage.getItem('sparkleCost')) || 1000;
-
-                machine1Cost = parseInt(localStorage.getItem('machine1Cost')) || 10;
-                machine2Cost = parseInt(localStorage.getItem('machine2Cost')) || 25;
-                machine3Cost = parseInt(localStorage.getItem('machine3Cost')) || 50;
-                machine4Cost = parseInt(localStorage.getItem('machine4Cost')) || 100;
-                machine5Cost = parseInt(localStorage.getItem('machine5Cost')) || 250;
-
-                updateDisplay();
-            } else {
-                // Initialize localStorage if not set
-                saveGame();
-            }
+            loadGame();
+            updateDisplay();
         };
+
+        // Load Game Data from localStorage
+        function loadGame() {
+            coffee = parseInt(localStorage.getItem('coffee')) || 0;
+            cpc = parseInt(localStorage.getItem('cpc')) || 1;
+            cps = parseInt(localStorage.getItem('cps')) || 0;
+            sparkleChance = parseInt(localStorage.getItem('sparkleChance')) || 0;
+            dirt = parseInt(localStorage.getItem('dirt')) || 0;
+
+            machine1 = parseInt(localStorage.getItem('machine1')) || 0;
+            machine2 = parseInt(localStorage.getItem('machine2')) || 0;
+            machine3 = parseInt(localStorage.getItem('machine3')) || 0;
+            machine4 = parseInt(localStorage.getItem('machine4')) || 0;
+            machine5 = parseInt(localStorage.getItem('machine5')) || 0;
+
+            cpcCost = parseInt(localStorage.getItem('cpcCost')) || 5;
+            sparkleCost = parseInt(localStorage.getItem('sparkleCost')) || 1000;
+
+            machine1Cost = parseInt(localStorage.getItem('machine1Cost')) || 10;
+            machine2Cost = parseInt(localStorage.getItem('machine2Cost')) || 25;
+            machine3Cost = parseInt(localStorage.getItem('machine3Cost')) || 50;
+            machine4Cost = parseInt(localStorage.getItem('machine4Cost')) || 100;
+            machine5Cost = parseInt(localStorage.getItem('machine5Cost')) || 250;
+        }
 
         // Save Game Data to localStorage
         function saveGame() {
@@ -372,6 +418,10 @@
             document.getElementById('machine5-level').innerText = machine5;
             document.getElementById('machine5-cost').innerText = machine5Cost;
 
+            // Update Shop Items (Enable or disable based on availability)
+            // Currently only Diamond Block is available
+            // Future items can be enabled here
+
             // Disable buttons if maxed out
             checkMaxedOut();
         }
@@ -387,7 +437,7 @@
         }
 
         // Coffee Button Click
-        coffeeButton.addEventListener('click', () => {
+        document.getElementById('coffee-button').addEventListener('click', () => {
             if (dirt === 0) {
                 const chance = Math.random() * 1000;
                 if (chance < sparkleChance) {
@@ -550,73 +600,52 @@
             }
         }, 3000); // Every 3 seconds
 
+        // Tab Navigation
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const target = tab.getAttribute('data-tab');
+                tabContents.forEach(content => {
+                    if(content.id === target) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            });
+        });
+
         // Function to Check Maxed Out Upgrades
         function checkMaxedOut() {
             // Sparkle Chance Max
             if (sparkleChance >= 100) {
                 upgradeSparkleBtn.disabled = true;
-                document.querySelector('#upgrade-sparkle p').innerText = "Maxed Out!";
+                document.querySelector('#upgrade-sparkle p:nth-child(3)').innerText = "Maxed Out!";
             } else {
                 upgradeSparkleBtn.disabled = false;
-                document.querySelector('#upgrade-sparkle p').innerText = `${sparkleCost} Coffee`;
+                document.querySelector('#upgrade-sparkle p:nth-child(3)').innerText = `Cost: ${sparkleCost} Coffee`;
             }
 
             // Machines Max
-            if (machine1 >= 25) {
-                machine1Btn.disabled = true;
-                document.querySelector('#machine1 p:nth-child(3)').innerText = "Maxed Out!";
-            } else {
-                machine1Btn.disabled = false;
-                document.querySelector('#machine1 p:nth-child(3)').innerText = `Cost: ${machine1Cost} Coffee`;
-            }
-
-            if (machine2 >= 50) {
-                machine2Btn.disabled = true;
-                document.querySelector('#machine2 p:nth-child(3)').innerText = "Maxed Out!";
-            } else {
-                machine2Btn.disabled = false;
-                document.querySelector('#machine2 p:nth-child(3)').innerText = `Cost: ${machine2Cost} Coffee`;
-            }
-
-            if (machine3 >= 100) {
-                machine3Btn.disabled = true;
-                document.querySelector('#machine3 p:nth-child(3)').innerText = "Maxed Out!";
-            } else {
-                machine3Btn.disabled = false;
-                document.querySelector('#machine3 p:nth-child(3)').innerText = `Cost: ${machine3Cost} Coffee`;
-            }
-
-            if (machine4 >= 250) {
-                machine4Btn.disabled = true;
-                document.querySelector('#machine4 p:nth-child(3)').innerText = "Maxed Out!";
-            } else {
-                machine4Btn.disabled = false;
-                document.querySelector('#machine4 p:nth-child(3)').innerText = `Cost: ${machine4Cost} Coffee`;
-            }
-
-            if (machine5 >= 500) {
-                machine5Btn.disabled = true;
-                document.querySelector('#machine5 p:nth-child(3)').innerText = "Maxed Out!";
-            } else {
-                machine5Btn.disabled = false;
-                document.querySelector('#machine5 p:nth-child(3)').innerText = `Cost: ${machine5Cost} Coffee`;
-            }
+            checkMachineMax('machine1', machine1, 25, machine1Cost, machine1Btn, '🛠️ Coffee Beans');
+            checkMachineMax('machine2', machine2, 50, machine2Cost, machine2Btn, '📄 Coffee Filters');
+            checkMachineMax('machine3', machine3, 100, machine3Cost, machine3Btn, '🌸 Coffee Cups');
+            checkMachineMax('machine4', machine4, 250, machine4Cost, machine4Btn, '🧂 Coffee Creamer');
+            checkMachineMax('machine5', machine5, 500, machine5Cost, machine5Btn, '🔥 Coffee Heater');
         }
 
-        // Reset Game Functionality (Optional)
-        /*
-        const resetButton = document.createElement('button');
-        resetButton.innerText = "🔄 Reset Game";
-        resetButton.style.marginTop = "20px";
-        document.body.appendChild(resetButton);
-
-        resetButton.addEventListener('click', () => {
-            if (confirm("Are you sure you want to reset the game?")) {
-                localStorage.clear();
-                location.reload();
+        // Helper Function to Check Machine Max
+        function checkMachineMax(machineId, machineLevel, maxLevel, machineCost, machineBtn, machineName) {
+            if (machineLevel >= maxLevel) {
+                machineBtn.disabled = true;
+                document.querySelector(`#${machineId} p:nth-child(3)`).innerText = "Maxed Out!";
+            } else {
+                machineBtn.disabled = false;
+                document.querySelector(`#${machineId} p:nth-child(3)`).innerText = `Cost: ${machineCost} Coffee`;
             }
-        });
-        */
+        }
     </script>
 </body>
 </html>
