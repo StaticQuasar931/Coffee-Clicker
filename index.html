@@ -377,6 +377,7 @@
         <p>Made by <strong>MouseManYT</strong> implemented by <a href="https://sites.google.com/view/staticquasar931" target="_blank"><strong>Static</strong></a></p>
     </footer>
 
+    <script src="format.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Game State
@@ -441,6 +442,17 @@
                 machine3: null,
                 machine4: null,
                 machine5: null
+            };
+
+            // Track reserved costs for queued upgrades
+            const reservedUpgradeCosts = {
+                cpc: 0,
+                sparkle: 0,
+                machine1: 0,
+                machine2: 0,
+                machine3: 0,
+                machine4: 0,
+                machine5: 0
             };
 
             // Auto-Save Timer
@@ -580,11 +592,6 @@
                 currentSparkleElem.innerText = gameState.sparkleChance; // Ensure both displays are updated
             }
 
-            // Format Numbers with Commas
-            function formatNumber(num) {
-                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
             // Show Notification with Queue
             function showNotification(message) {
                 notificationQueue.push(message);
@@ -679,6 +686,25 @@
                     return;
                 }
 
+                // Determine cost and reserve it immediately
+                let cost;
+                if (upgradeType === 'cpc') {
+                    cost = gameState.cpcCost || 5;
+                } else if (upgradeType === 'sparkle') {
+                    cost = gameState.sparkleCost || 1000;
+                } else {
+                    cost = gameState.machines[upgradeType].cost;
+                }
+
+                if (gameState.coffee < cost) {
+                    showNotification('☕ Not enough coffee for this upgrade.');
+                    return;
+                }
+
+                gameState.coffee -= cost;
+                reservedUpgradeCosts[upgradeType] = cost;
+                updateDisplay();
+
                 // Add to queue and set timer
                 upgradeTimers[upgradeType] = setTimeout(() => {
                     applyUpgrade(upgradeType);
@@ -690,15 +716,17 @@
 
             // Apply Upgrade
             function applyUpgrade(upgradeType) {
+                if (!reservedUpgradeCosts[upgradeType]) {
+                    return;
+                }
+
                 if (upgradeType === 'cpc') {
-                    const cost = gameState.cpcCost || 5;
-                    gameState.coffee -= cost;
+                    const cost = reservedUpgradeCosts[upgradeType];
                     gameState.cpc += 1;
                     gameState.cpcCost = Math.ceil(cost * costMultipliers.cpc);
                     showNotification('✨ Coffee per Click Upgraded!');
                 } else if (upgradeType === 'sparkle') {
-                    const cost = gameState.sparkleCost || 1000;
-                    gameState.coffee -= cost;
+                    const cost = reservedUpgradeCosts[upgradeType];
                     gameState.sparkleChance += 1;
                     gameState.sparkleChance = Math.min(gameState.sparkleChance, 100);
                     gameState.sparkleCost = Math.ceil(cost * costMultipliers.sparkle);
@@ -706,12 +734,13 @@
                 } else {
                     // Machines
                     const machineData = gameState.machines[upgradeType];
-                    gameState.coffee -= machineData.cost;
+                    const cost = reservedUpgradeCosts[upgradeType];
                     machineData.level += 1;
                     gameState.cps += 1;
-                    machineData.cost = Math.ceil(machineData.cost * costMultipliers.machine);
+                    machineData.cost = Math.ceil(cost * costMultipliers.machine);
                     showNotification(`${getMachineName(upgradeType)} Upgraded!`);
                 }
+                reservedUpgradeCosts[upgradeType] = 0;
                 updateDisplay();
                 saveGame();
             }
@@ -783,7 +812,7 @@
                 }, 600);
             }
 
-            // Stop Upgrades when User Stops Clicking
+            // Track user inactivity after upgrade clicks
             let clickTimeout;
             const CLICK_DELAY = 1000; // 1 second after last click
 
